@@ -1,0 +1,254 @@
+---
+AWSTemplateFormatVersion: 2010-09-09
+Description: Launches a Titian Mosaic FreezerMgmt application server and database.
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+    - Label:
+        default: Titian Configurations
+      Parameters:
+      - pTitianMosaicAccountName
+      - pTitianMosaicAppName
+      - pDNSName
+    - Label:
+        default: Network Configuration
+      Parameters:
+      - pVPCCIDR
+      - pPublicSubnet1CIDR
+      - pPublicSubnet2CIDR
+      - pPrivateSubnet1CIDR
+      - pPrivateSubnet2CIDR
+      - pSecurityGroupForWebAccess
+    - Label:
+        default: Amazon EC2 Configuration
+      Parameters:
+      - pEC2KeyPair
+      - pTitianMosaicAppServerInstanceType
+    - Label:
+        default: Amazon RDS Configuration
+      Parameters:
+      - pTitianMosaicDBName              
+      - pTitianMosaicDBUsername
+      - pTitianMosaicDBPassword
+      - pTitianMosaicDBInstanceSize
+      - pTitianMosaicDBAllocatedStorage
+      - pDatabaseEngine
+      - pDatabaseEngineLicenseModel
+    ParameterLabels:
+      QSS3KeyPrefix:
+        default: Quick Start S3 Key Prefix
+      QSS3BucketName:
+        default: Quick Start S3 Bucket Name  
+      pPrivateSubnet1CIDR:
+        default: Private Subnet 1 CIDR
+      pPrivateSubnet2CIDR:
+        default: Private Subnet 2 CIDR
+      pPublicSubnet1CIDR:
+        default: Public Subnet 1 CIDR
+      pPublicSubnet2CIDR:
+        default: Public Subnet 2 CIDR
+      pVPCCIDR:
+        default: VPC CIDR   
+      pSecurityGroupForWebAccess:
+        default: Web Access Security Group
+      pWebAccessCIDR:
+        default: If no web access security group, the CIDR you wish to have the web server accessible to
+      pDNSName: 
+        default: Mosaic Server DNS Name
+      pTitianMosaicAccountName:
+        default: Titian Mosaic Account Name
+      pTitianMosaicAppName:
+        default: Titian Mosaic App Name
+      pEC2KeyPair:
+        default: Key Pair for Mosaic Server            
+      pTitianMosaicAppServerInstanceType:
+        default: App Server Size
+      pTitianMosaicDBName:
+        default: Database Name
+      pTitianMosaicDBUsername:
+        default: Database User/Owner
+      pTitianMosaicDBPassword:
+        default: Database Password        
+      pTitianMosaicDBInstanceSize:
+        default: Database Size
+      pDatabaseEngine:
+        default: Database Engine
+      pDatabaseEngineLicenseModel:
+        default: Database License Model
+      pTitianMosaicDBAllocatedStorage:
+        default: Database Storage Capacity (GB)
+            
+Parameters:
+  QSS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
+      (-).
+    Default: quickstart-reference
+    Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
+      can include numbers, lowercase letters, uppercase letters, and hyphens (-).
+      It cannot start or end with a hyphen (-).
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and a forward slash (/) at the end of the prefix.
+    Description: S3 key prefix for the Quick Start assets. Quick Start key prefix
+      can include numbers, lowercase letters, uppercase letters, hyphens (-), and
+      forward slash (/).
+    Default: quickstart-titian-mosaic/
+    Type: String
+  pAvailabilityZones:
+    Description: List of Availability Zones to use for the subnets in the VPC. Only
+      two Availability Zones are used for this deployment, and the logical order of
+      your selections is preserved.
+    Type: List<AWS::EC2::AvailabilityZone::Name>
+  pPrivateSubnet1CIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Default: 10.0.0.0/19
+    Description: CIDR block for private subnet 1 located in Availability Zone 1
+    Type: String
+  pPrivateSubnet2CIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Default: 10.0.32.0/19
+    Description: CIDR block for private subnet 2 located in Availability Zone 2
+    Type: String
+  pPublicSubnet1CIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Default: 10.0.128.0/20
+    Description: CIDR block for the public (DMZ) subnet 1 located in Availability
+      Zone 1
+    Type: String
+  pPublicSubnet2CIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Default: 10.0.144.0/20
+    Description: CIDR block for the public (DMZ) subnet 2 located in Availability
+      Zone 2
+    Type: String
+  pVPCCIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Default: 10.0.0.0/16
+    Description: CIDR block for the VPC
+    Type: String
+  pDNSName:
+    Description: The internal DNS CNAME to be used for the Mosaic server. Leave the default if you are unsure of what this does.
+    Type: String
+    Default: mosaic
+  pTitianMosaicAccountName:
+    Description: This is the account named agreed upon by the company and Titian. Used for licensing purposes. Typically, this is the company name. This parameter must be all lower case and only alphanumeric values.
+    Type: String
+    AllowedPattern : ^[a-z0-9]*$
+    Default: demo
+  pTitianMosaicAppName:
+    Description: Similar to the Account Name parameter, this is the app named agreed upon by the company and Titian. Used for licensing purposes. Typically, this is the lab name. This parameter must be all lower case and only alphanumeric values.
+    Type: String
+    AllowedPattern : ^[a-z0-9]*$
+    Default: demo
+  pSecurityGroupForWebAccess:
+    Description: Security group for web access
+    Type: String
+    Default: ""
+  pWebAccessCIDR:
+    Description:  If no web access security group, the CIDR you wish to have the web server accessible to
+    Type: String    
+    Default: "0.0.0.0/0"
+  pEC2KeyPair:
+    Description: Key Name for Mosaic server.
+    Type: AWS::EC2::KeyPair::KeyName      
+  pTitianMosaicAppServerInstanceType:
+    Description: Titian FreezerMgmt app server EC2 instance type
+    Type: String
+    Default: t2.large
+  pTitianMosaicDBName:
+    Description: Titian Mosaic FreezerMgmt Database Name
+    Type: String
+    MaxLength: 8
+    Default: mosaic
+  pTitianMosaicDBUsername:
+    Description: Titian Mosaic FreezerMgmt Database User/Owner
+    Type: String
+    Default: mosaicowner
+  pTitianMosaicDBPassword:
+    Description: Titian Mosaic FreezerMgmt Database User/Owner Password
+    Type: String
+    NoEcho: true
+  pTitianMosaicDBInstanceSize:
+    Description: Titian Mosaic FreezerMgmt Database Size (db.t2.large for example)
+    Type: String
+    Default: db.t2.large
+  pTitianMosaicDBAllocatedStorage:
+    Description: Titian Mosaic FreezerMgmt Database Total storage size in GB (100 for example)
+    Type: String
+  pDatabaseEngine:
+    Description: Oracle Version. Use the default.
+    Type: String
+    Default: oracle-se2
+  pDatabaseEngineLicenseModel: 
+    Description: Oracle license model.
+    AllowedValues:
+      - license-included
+      - bring-your-own-license
+    Type: String
+    Default: license-included
+  pDnsHostedZoneID:
+    Description: Internal DNS hosted zone ID.
+    Type: String
+    Default: ""
+  pDnsHostedZoneApexDomain:
+    Description: Internal DNS Apex Domain
+    Type: String
+    Default: ""
+
+Resources:
+  rVPCStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL:
+        Fn::Sub: https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template
+      Parameters:
+        AvailabilityZones: !Join [ "," , !Ref pAvailabilityZones ]
+        KeyPairName: !Ref pEC2KeyPair
+        NumberOfAZs: 2
+        PrivateSubnet1ACIDR: !Ref pPrivateSubnet1CIDR
+        PrivateSubnet2ACIDR: !Ref pPrivateSubnet2CIDR
+        PublicSubnet1CIDR: !Ref pPublicSubnet1CIDR
+        PublicSubnet2CIDR: !Ref pPublicSubnet2CIDR
+        VPCCIDR: !Ref pVPCCIDR
+
+  rTitianFreezerManagement:
+    Type: AWS::CloudFormation::Stack
+    DependsOn:
+    - rVPCStack
+    Properties:
+      TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/titian-mosaic.template
+      TimeoutInMinutes: 40
+      Parameters:
+        pDNSName: !Ref pDNSName
+        pTitianMosaicAccountName: !Ref pTitianMosaicAccountName
+        pTitianMosaicAppName: !Ref pTitianMosaicAppName
+        pSecurityGroupForWebAccess: !Ref pSecurityGroupForWebAccess
+        pWebAccessCIDR: !Ref pWebAccessCIDR
+        pVpcId: !GetAtt rVPCStack.Outputs.VPCID
+        pAppSubnetA: !GetAtt rVPCStack.Outputs.PublicSubnet1ID
+        pTitianMosaicDBSubnetA: !GetAtt rVPCStack.Outputs.PrivateSubnet1AID
+        pTitianMosaicDBSubnetB: !GetAtt rVPCStack.Outputs.PrivateSubnet2AID
+        pEC2KeyPair: !Ref pEC2KeyPair
+        pTitianMosaicAppServerInstanceType: !Ref pTitianMosaicAppServerInstanceType
+        pTitianMosaicDBName: !Ref pTitianMosaicDBName
+        pTitianMosaicDBUsername: !Ref pTitianMosaicDBUsername
+        pTitianMosaicDBPassword: !Ref pTitianMosaicDBPassword
+        pTitianMosaicDBInstanceSize: db.t2.large
+        pDatabaseEngine: !Ref pDatabaseEngine
+        pDatabaseEngineLicenseModel: !Ref pDatabaseEngineLicenseModel
+        pTitianMosaicDBAllocatedStorage: 50
+        pDnsHostedZoneID: !Ref pDnsHostedZoneID
+        pDnsHostedZoneApexDomain: !Ref pDnsHostedZoneApexDomain
+      
+Outputs:
+  rTitianMosaicWebAppInstance:
+    Value: !GetAtt rTitianFreezerManagement.Outputs.rTitianMosaicWebAppInstance

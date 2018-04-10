@@ -2,6 +2,7 @@ global:
   marketplace-ami: false
   owner: quickstart-eng@amazon.com
   qsname: quickstart-titian-mosaic
+  s3bucket: ajfriedm-hclscollab-taskcat-bucket
   regions:
     - ap-northeast-1
     - ap-northeast-2
@@ -20,8 +21,7 @@ global:
  
 tests:
   quickstart-titian-mosaict1:
-    parameter_input: quickstart-titian-mosaic-example-params1.json
-    template_file: quickstart-titian-mosaic-example1.template
-  quickstart-titian-mosaict2:
-    parameter_input: quickstart-titian-mosaic-example-params2.json
-    template_file: quickstart-titian-mosaic-example2.template
+    parameter_input: titian-mosaic-params.t1.json
+    template_file: titian-mosaic-master.template
+    regions:
+      - us-east-1

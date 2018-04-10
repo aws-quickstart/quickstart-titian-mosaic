@@ -1,0 +1,54 @@
+[
+    {
+        "ParameterKey": "pAvailabilityZones",
+        "ParameterValue": "$[taskcat_genaz_2]"
+    },
+    {
+        "ParameterKey": "pEC2KeyPair",
+        "ParameterValue": "ajfriedm-hclscollab-taskcat-iad"
+    },
+    {
+        "ParameterKey": "pPrivateSubnet1CIDR",
+        "ParameterValue": "10.250.32.0/20"
+    },
+    {
+        "ParameterKey": "pPrivateSubnet2CIDR",
+        "ParameterValue": "10.250.48.0/20"
+    },
+    {
+        "ParameterKey": "pPublicSubnet1CIDR",
+        "ParameterValue": "10.250.0.0/20"
+    },
+    {
+        "ParameterKey": "pPublicSubnet2CIDR",
+        "ParameterValue": "10.250.16.0/20"
+    },
+    {
+        "ParameterKey": "pVPCCIDR",
+        "ParameterValue": "10.250.0.0/16"
+    },
+    {
+        "ParameterKey": "QSS3BucketName",
+        "ParameterValue": "ajfriedm-hclscollab-taskcat-bucket"
+    },
+    {
+        "ParameterKey": "QSS3KeyPrefix",
+        "ParameterValue": "quickstart-titian-mosaic/"
+    },
+    {
+        "ParameterKey": "pTitianMosaicDBPassword",
+        "ParameterValue": "Test1234!#"
+    },
+    {
+        "ParameterKey": "pTitianMosaicDBAllocatedStorage",
+        "ParameterValue": "50"
+    },
+    {
+        "ParameterKey": "pDatabaseEngine",
+        "ParameterValue": "oracle-ee"
+    },
+    {
+        "ParameterKey": "pDatabaseEngineLicenseModel",
+        "ParameterValue": "bring-your-own-license"
+    }
+]
