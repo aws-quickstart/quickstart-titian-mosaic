@@ -7,8 +7,8 @@ Metadata:
     - Label:
         default: Titian Configurations
       Parameters:
-      - pTitianMosaicAccountName
-      - pTitianMosaicAppName
+      - pAccountName
+      - pAppName
       - pDNSName
     - Label:
         default: Network Configuration
@@ -23,15 +23,15 @@ Metadata:
         default: Amazon EC2 Configuration
       Parameters:
       - pEC2KeyPair
-      - pTitianMosaicAppServerInstanceType
+      - pAppServerInstanceType
     - Label:
         default: Amazon RDS Configuration
       Parameters:
-      - pTitianMosaicDBName              
-      - pTitianMosaicDBUsername
-      - pTitianMosaicDBPassword
-      - pTitianMosaicDBInstanceSize
-      - pTitianMosaicDBAllocatedStorage
+      - pDBName              
+      - pDBUsername
+      - pDBPassword
+      - pDBInstanceSize
+      - pDBAllocatedStorage
       - pDatabaseEngine
       - pDatabaseEngineLicenseModel
     ParameterLabels:
@@ -55,27 +55,27 @@ Metadata:
         default: If no web access security group, the CIDR you wish to have the web server accessible to
       pDNSName: 
         default: Mosaic Server DNS Name
-      pTitianMosaicAccountName:
+      pAccountName:
         default: Titian Mosaic Account Name
-      pTitianMosaicAppName:
+      pAppName:
         default: Titian Mosaic App Name
       pEC2KeyPair:
         default: Key Pair for Mosaic Server            
-      pTitianMosaicAppServerInstanceType:
+      pAppServerInstanceType:
         default: App Server Size
-      pTitianMosaicDBName:
+      pDBName:
         default: Database Name
-      pTitianMosaicDBUsername:
+      pDBUsername:
         default: Database User/Owner
-      pTitianMosaicDBPassword:
+      pDBPassword:
         default: Database Password        
-      pTitianMosaicDBInstanceSize:
+      pDBInstanceSize:
         default: Database Size
       pDatabaseEngine:
         default: Database Engine
       pDatabaseEngineLicenseModel:
         default: Database License Model
-      pTitianMosaicDBAllocatedStorage:
+      pDBAllocatedStorage:
         default: Database Storage Capacity (GB)
             
 Parameters:
@@ -139,12 +139,12 @@ Parameters:
     Description: The internal DNS CNAME to be used for the Mosaic server. Leave the default if you are unsure of what this does.
     Type: String
     Default: mosaic
-  pTitianMosaicAccountName:
+  pAccountName:
     Description: This is the account named agreed upon by the company and Titian. Used for licensing purposes. Typically, this is the company name. This parameter must be all lower case and only alphanumeric values.
     Type: String
     AllowedPattern : ^[a-z0-9]*$
     Default: demo
-  pTitianMosaicAppName:
+  pAppName:
     Description: Similar to the Account Name parameter, this is the app named agreed upon by the company and Titian. Used for licensing purposes. Typically, this is the lab name. This parameter must be all lower case and only alphanumeric values.
     Type: String
     AllowedPattern : ^[a-z0-9]*$
@@ -160,29 +160,29 @@ Parameters:
   pEC2KeyPair:
     Description: Key Name for Mosaic server.
     Type: AWS::EC2::KeyPair::KeyName      
-  pTitianMosaicAppServerInstanceType:
-    Description: Titian FreezerMgmt app server EC2 instance type
+  pAppServerInstanceType:
+    Description: Titian Mosaic app server EC2 instance type
     Type: String
     Default: t2.large
-  pTitianMosaicDBName:
-    Description: Titian Mosaic FreezerMgmt Database Name
+  pDBName:
+    Description: Titian Mosaic Database Name
     Type: String
     MaxLength: 8
     Default: mosaic
-  pTitianMosaicDBUsername:
-    Description: Titian Mosaic FreezerMgmt Database User/Owner
+  pDBUsername:
+    Description: Titian Mosaic Database User/Owner
     Type: String
     Default: mosaicowner
-  pTitianMosaicDBPassword:
-    Description: Titian Mosaic FreezerMgmt Database User/Owner Password
+  pDBPassword:
+    Description: Titian Mosaic Database User/Owner Password
     Type: String
     NoEcho: true
-  pTitianMosaicDBInstanceSize:
-    Description: Titian Mosaic FreezerMgmt Database Size (db.t2.large for example)
+  pDBInstanceSize:
+    Description: Titian Mosaic Database Size (db.t2.large for example)
     Type: String
     Default: db.t2.large
-  pTitianMosaicDBAllocatedStorage:
-    Description: Titian Mosaic FreezerMgmt Database Total storage size in GB (100 for example)
+  pDBAllocatedStorage:
+    Description: Titian Mosaic Database Total storage size in GB (100 for example)
     Type: String
   pDatabaseEngine:
     Description: Oracle Version. Use the default.
@@ -229,23 +229,26 @@ Resources:
       TimeoutInMinutes: 40
       Parameters:
         pDNSName: !Ref pDNSName
-        pTitianMosaicAccountName: !Ref pTitianMosaicAccountName
-        pTitianMosaicAppName: !Ref pTitianMosaicAppName
+        pAccountName: !Ref pAccountName
+        pAppName: !Ref pAppName
         pSecurityGroupForWebAccess: !Ref pSecurityGroupForWebAccess
         pWebAccessCIDR: !Ref pWebAccessCIDR
         pVpcId: !GetAtt rVPCStack.Outputs.VPCID
+        pDmzSubnetA: !GetAtt rVPCStack.Outputs.PublicSubnet1ID
+        pDmzSubnetB: !GetAtt rVPCStack.Outputs.PublicSubnet2ID
         pAppSubnetA: !GetAtt rVPCStack.Outputs.PublicSubnet1ID
-        pTitianMosaicDBSubnetA: !GetAtt rVPCStack.Outputs.PrivateSubnet1AID
-        pTitianMosaicDBSubnetB: !GetAtt rVPCStack.Outputs.PrivateSubnet2AID
+        pAppSubnetB: !GetAtt rVPCStack.Outputs.PublicSubnet2ID
+        pDBSubnetA: !GetAtt rVPCStack.Outputs.PrivateSubnet1AID
+        pDBSubnetB: !GetAtt rVPCStack.Outputs.PrivateSubnet2AID
         pEC2KeyPair: !Ref pEC2KeyPair
-        pTitianMosaicAppServerInstanceType: !Ref pTitianMosaicAppServerInstanceType
-        pTitianMosaicDBName: !Ref pTitianMosaicDBName
-        pTitianMosaicDBUsername: !Ref pTitianMosaicDBUsername
-        pTitianMosaicDBPassword: !Ref pTitianMosaicDBPassword
-        pTitianMosaicDBInstanceSize: db.t2.large
+        pAppServerInstanceType: !Ref pAppServerInstanceType
+        pDBName: !Ref pDBName
+        pDBUsername: !Ref pDBUsername
+        pDBPassword: !Ref pDBPassword
+        pDBInstanceSize: db.t2.large
         pDatabaseEngine: !Ref pDatabaseEngine
         pDatabaseEngineLicenseModel: !Ref pDatabaseEngineLicenseModel
-        pTitianMosaicDBAllocatedStorage: 50
+        pDBAllocatedStorage: 50
         pDnsHostedZoneID: !Ref pDnsHostedZoneID
         pDnsHostedZoneApexDomain: !Ref pDnsHostedZoneApexDomain
       

@@ -7,40 +7,45 @@ Metadata:
     - Label:
         default: Titian Configurations
       Parameters:
-      - pTitianMosaicAccountName
-      - pTitianMosaicAppName
+      - pAccountName
+      - pAppName
       - pDNSName
     - Label:
         default: Network Configuration
       Parameters:
       - pSecurityGroupForWebAccess
       - pVpcId
+      - pDmzSubnetA
+      - pDmzSubnetB
       - pAppSubnetA
-      - pTitianMosaicDBSubnetA
-      - pTitianMosaicDBSubnetB
+      - pAppSubnetB
+      - pDBSubnetA
+      - pDBSubnetB
       - pDnsHostedZoneID
       - pDnsHostedZoneApexDomain
+      - pLoadBalancerType
     - Label:
         default: Amazon EC2 Configuration
       Parameters:
       - pEC2KeyPair
-      - pTitianMosaicAppServerInstanceType
+      - pAppServerInstanceType
     - Label:
         default: Amazon RDS Configuration
       Parameters:
-      - pTitianMosaicDBName              
-      - pTitianMosaicDBUsername
-      - pTitianMosaicDBPassword
-      - pTitianMosaicDBInstanceSize
-      - pTitianMosaicDBAllocatedStorage
+      - pDBName              
+      - pDBUsername
+      - pDBPassword
+      - pDBInstanceSize
+      - pDBAllocatedStorage
       - pDatabaseEngine
       - pDatabaseEngineLicenseModel
+      - pDbMultiAZ
     ParameterLabels:
       pDNSName: 
         default: Mosaic Server DNS Name
-      pTitianMosaicAccountName:
+      pAccountName:
         default: Titian Mosaic Account Name
-      pTitianMosaicAppName:
+      pAppName:
         default: Titian Mosaic App Name
       pSecurityGroupSSHFromVpc:
         default: SSH Security Group
@@ -50,46 +55,69 @@ Metadata:
         default: Security group for web access
       pWebAccessCIDR:
         default: If no web access security group, the CIDR you wish to have the web server accessible to
+      pDmzSubnetA:
+        default: DMZ Subnet A      
+      pDmzSubnetB:
+        default: DMZ Subnet B
       pAppSubnetA:
-        default: Application Subnet
-      pTitianMosaicDBSubnetA:
+        default: Application Subnet A      
+      pAppSubnetB:
+        default: Application Subnet B
+      pDBSubnetA:
         default: Database Subnet A
-      pTitianMosaicDBSubnetB:
+      pDBSubnetB:
         default: Database Subnet B
       pEC2KeyPair:
         default: Key Pair for Mosaic Server            
-      pTitianMosaicAppServerInstanceType:
+      pAppServerInstanceType:
         default: App Server Size
-      pTitianMosaicDBName:
+      pDBName:
         default: Database Name
-      pTitianMosaicDBUsername:
+      pDBUsername:
         default: Database User/Owner
-      pTitianMosaicDBPassword:
+      pDBPassword:
         default: Database Password        
-      pTitianMosaicDBInstanceSize:
+      pDBInstanceSize:
         default: Database Size
       pDatabaseEngine:
         default: Database Engine
       pDatabaseEngineLicenseModel:
         default: Database License Model
-      pTitianMosaicDBAllocatedStorage:
-        default: Database Storage Capacity (GB)           
+      pDBAllocatedStorage:
+        default: Database Storage Capacity (GB)   
+      pLoadBalancerType:
+        default: Type of load balancer (internal/external)
+      pDbMultiAZ:
+        default: Do you want the database to be configured for high availability?
 Parameters:
   pDNSName:
     Description: The internal DNS CNAME to be used for the Mosaic server. Leave the default if you are unsure of what this does.
     Type: String
     Default: screener
-  pTitianMosaicAccountName:
+  pAccountName:
     Description: This is the account named agreed upon by the company and Titian. Used for licensing purposes. Typically, this is the company name. This parameter must be all lower case and only alphanumeric values.
     Type: String
     AllowedPattern : ^[a-z0-9]*$
-  pTitianMosaicAppName:
+  pAppName:
     Description: Similar to the Account Name parameter, this is the app named agreed upon by the company and Titian. Used for licensing purposes. Typically, this is the lab name. This parameter must be all lower case and only alphanumeric values.
     Type: String
     AllowedPattern : ^[a-z0-9]*$
-  pAppSubnetA:
-    Description: Production App Subnet A. Target subnet for Titian Mosaic app server. Use 'Production App Subnet A' in the filter.
+  pDmzSubnetA:
+    Description: Production DMZ Subnet A. Target subnet for Titian Mosaic app server. 
     Type: AWS::EC2::Subnet::Id
+  pDmzSubnetB:
+    Description: Production DMZ Subnet B. Target subnet for Titian Mosaic app server. 
+    Type: AWS::EC2::Subnet::Id
+  pAppSubnetA:
+    Description: Production App Subnet A. Target subnet for Titian Mosaic app server. 
+    Type: AWS::EC2::Subnet::Id
+  pAppSubnetB:
+    Description: Production App Subnet B. Target subnet for Titian Mosaic app server. 
+    Type: AWS::EC2::Subnet::Id
+  pLoadBalancerType:
+    Default: internet-facing
+    Type: String
+    AllowedValues: ["internet-facing", "internal"]
   pSecurityGroupForWebAccess:
     Description: Security group for web access
     Type: String
@@ -101,37 +129,38 @@ Parameters:
   pEC2KeyPair:
     Description: Key Name for Mosaic server.
     Type: AWS::EC2::KeyPair::KeyName      
-  pTitianMosaicAppServerInstanceType:
+  pAppServerInstanceType:
     Description: Titian FreezerMgmt app server EC2 instance type
     Type: String
     Default: t2.large
   pVpcId:
     Description: Production VPC ID.
     Type: AWS::EC2::VPC::Id
-  pTitianMosaicDBName:
+  pDBName:
     Description: Titian Mosaic FreezerMgmt Database Name
     Type: String
     MaxLength: 8
     Default: mosaic
-  pTitianMosaicDBUsername:
+  pDBUsername:
     Description: Titian Mosaic FreezerMgmt Database User/Owner
     Type: String
     Default: mosaicowner
-  pTitianMosaicDBPassword:
+  pDBPassword:
     Description: Titian Mosaic FreezerMgmt Database User/Owner Password
     Type: String
     NoEcho: true
-  pTitianMosaicDBInstanceSize:
+  pDBInstanceSize:
     Description: Titian Mosaic FreezerMgmt Database Size (db.t2.large for example)
     Type: String
     Default: db.t2.large
-  pTitianMosaicDBAllocatedStorage:
+  pDBAllocatedStorage:
     Description: Titian Mosaic FreezerMgmt Database Total storage size in GB (100 for example)
     Type: String
-  pTitianMosaicDBSubnetA:
+    Default: 20
+  pDBSubnetA:
     Description: Subnet ID for Production DB Subnet A. Use 'Production DB Subnet A' in the filter.
     Type: AWS::EC2::Subnet::Id
-  pTitianMosaicDBSubnetB:
+  pDBSubnetB:
     Description: Subnet ID for Production DB Subnet B. Use 'Production DB Subnet B' in the filter.
     Type: AWS::EC2::Subnet::Id
   pDatabaseEngine:
@@ -146,6 +175,11 @@ Parameters:
       - bring-your-own-license
     Type: String
     Default: license-included
+  pDbMultiAZ:
+    Description: Do you want the database to be multi AZ?
+    Type: String
+    AllowedValues: ['true', 'false']
+    Default: false
   pDnsHostedZoneID:
     Description: Internal DNS hosted zone ID.
     Type: String
@@ -167,7 +201,7 @@ Conditions:
   cWebAccessSG: !Not [ !Equals [ !Ref pSecurityGroupForWebAccess, "" ] ]
   cNoWebAccessSG: !Equals [ !Ref pSecurityGroupForWebAccess, "" ]
 Resources:
-  rMosaicDNSRecord:
+  rDNSRecord:
     Type: AWS::Route53::RecordSet
     Condition: cDNSRecord
     Properties:
@@ -177,124 +211,203 @@ Resources:
       Type: CNAME 
       TTL: 60
       ResourceRecords:
-      - !GetAtt rTitianMosaicWebAppInstance.PrivateIp
-  rSecurityGroupTitianMosaicAppServersWithSG:
-    Type: AWS::EC2::SecurityGroup
-    Condition: cWebAccessSG
-    Properties:
-      GroupDescription: Allow access to Titian Mosaic App Servers.
-      VpcId: !Ref pVpcId
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: 80
-        ToPort: 80
-        SourceSecurityGroupId: !Ref pSecurityGroupForWebAccess
-      - IpProtocol: tcp
-        FromPort: 443
-        ToPort: 443
-        SourceSecurityGroupId: !Ref pSecurityGroupForWebAccess
-      Tags:
-      - Key: Name
-        Value: sg-db-access-ports-to-Titian app server
-      - Key: Environment
-        Value: Production
-  rSecurityGroupTitianMosaicAppServersNoSG:
-    Type: AWS::EC2::SecurityGroup
-    Condition: cNoWebAccessSG
-    Properties:
-      GroupDescription: Allow access to Titian Mosaic App Servers. Open to world.
-      VpcId: !Ref pVpcId
-      SecurityGroupIngress:
-      - IpProtocol: tcp
-        FromPort: 80
-        ToPort: 80
-        CidrIp: !Ref pWebAccessCIDR
-      - IpProtocol: tcp
-        FromPort: 443
-        ToPort: 443
-        CidrIp: !Ref pWebAccessCIDR
-      Tags:
-      - Key: Name
-        Value: sg-db-access-ports-to-Titian app server
-      - Key: Environment
-        Value: Production
-  rSecurityGroupTitianMosaicDB:
-    Type: AWS::RDS::DBSecurityGroup
-    Properties:
-      GroupDescription: Allow access to Titian Mosaic MySql DB to Titian App Server or other integration points 
-      EC2VpcId: !Ref pVpcId
-      DBSecurityGroupIngress:
-      - EC2SecurityGroupId: !If [ cWebAccessSG, !Ref rSecurityGroupTitianMosaicAppServersWithSG, !Ref  rSecurityGroupTitianMosaicAppServersNoSG ]
-  rTitianMosaicAppServerInstanceEniWithSG:
-    Type: AWS::EC2::NetworkInterface
-    Condition: cWebAccessSG
-    Properties:
-      SubnetId: !Ref pAppSubnetA
-      GroupSet: 
-      - !Ref pSecurityGroupForWebAccess
-      Description: Interface for Titian Mosaic app server device
-      Tags:
-        - Key: Network
-          Value: ProductionTitianMosaicAppServerENIDevice
-  rTitianMosaicAppServerInstanceEniNoSG:
-    Type: AWS::EC2::NetworkInterface
-    Condition: cNoWebAccessSG
-    Properties:
-      SubnetId: !Ref pAppSubnetA
-      Description: Interface for Titian Mosaic app server device
-      Tags:
-        - Key: Network
-          Value: ProductionTitianMosaicAppServerENIDevice
-          
-  rTitianMosaicWebAppInstance:
-    Type: AWS::EC2::Instance
-    Properties:
-      InstanceType:
-        Ref: pTitianMosaicAppServerInstanceType
-      SourceDestCheck: false
-      KeyName: !Ref pEC2KeyPair
-      Tags:
-      - Key: Name
-        Value: Titian Mosaic FreezerMgmt App Server
-      UserData:
-        Fn::Base64:
-          !Sub |
-            <script>"C:\\Program Files\\Titian Software\\Bootstrap\\Main\\bootstrap-mosaic.cmd" ${rTitianMosaicDBInstance.Endpoint.Address} ${pTitianMosaicDBName} ${pTitianMosaicDBUsername} ${pTitianMosaicDBPassword} ${pDNSName} Administrator</script>
-      ImageId: !FindInMap [ AWSAMIRegionMap, !Ref "AWS::Region", mAppServerAMI ]
-      NetworkInterfaces:
-      - NetworkInterfaceId: !If [ cWebAccessSG, !Ref rTitianMosaicAppServerInstanceEniWithSG, !Ref rTitianMosaicAppServerInstanceEniNoSG ]
-        DeviceIndex: 0
+        - !GetAtt rApplicationLoadBalancer.DNSName
 
-  rTitianMosaicDBInstance:
-    Type: AWS::RDS::DBInstance
-    DependsOn: rSecurityGroupTitianMosaicDB
+
+  ###
+  ### Security Groups
+  ###
+  rSecurityGroupAlbWithSG: 
+    Type: AWS::EC2::SecurityGroup
+    Condition: cWebAccessSG
+    Properties: 
+      GroupDescription: Allow access to Titian Mosaic ALBs. Open to SG.
+      VpcId: !Ref pVpcId
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        SourceSecurityGroupId: !Ref pSecurityGroupForWebAccess
+      - IpProtocol: tcp
+        FromPort: 443
+        ToPort: 443
+        SourceSecurityGroupId: !Ref pSecurityGroupForWebAccess
+      Tags: 
+      - Key: Name
+        Value: sg-titian-mosaic-access-ports-to-alb-bysg
+  rSecurityGroupAlbNoSG:
+    Type: AWS::EC2::SecurityGroup
+    Condition: cNoWebAccessSG
     Properties:
-      DBSubnetGroupName: !Ref rTitianMosaicDBSubnetGroup
-      DBSecurityGroups:
-      - !Ref rSecurityGroupTitianMosaicDB
+      GroupDescription: Allow access to Titian Mosaic ALB. Open to CIDR.
+      VpcId: !Ref pVpcId
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: !Ref pWebAccessCIDR
+      - IpProtocol: tcp
+        FromPort: 443
+        ToPort: 443
+        CidrIp: !Ref pWebAccessCIDR
+      Tags:
+      - Key: Name
+        Value: sg-titian-mosaic-access-ports-to-alb-bycidr
+      
+  rSecurityGroupALBs:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow access to Titian Mosaic ALBs.
+      VpcId: !Ref pVpcId
+      Tags:
+      - Key: Name
+        Value: sg-titian-mosaic-alb
+
+  rSecurityGroupAppServers:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow access to Titian Mosasic App Servers.
+      VpcId: !Ref pVpcId
+      Tags:
+      - Key: Name
+        Value: sg-titian-mosaic-appserver
+  rSecurityGroupAppServersIngressHttp:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref rSecurityGroupAppServers
+      IpProtocol: tcp
+      FromPort: 80
+      ToPort: 80
+      SourceSecurityGroupId: !Ref rSecurityGroupALBs
+  rSecurityGroupAppServersIngressHttps:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      GroupId: !Ref rSecurityGroupAppServers
+      IpProtocol: tcp
+      FromPort: 443
+      ToPort: 443
+      SourceSecurityGroupId: !Ref rSecurityGroupALBs
+      
+  rSecurityGroupDB:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow access to Titian Mosaic DB to Titian App Server or other integration points 
+      VpcId: !Ref pVpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 1521
+          ToPort: 1521
+          SourceSecurityGroupId: !Ref rSecurityGroupAppServers
+
+  ###
+  ### Application Load Balancer
+  ###
+  rApplicationLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: !Ref pLoadBalancerType
+      SecurityGroups:
+        - !Ref rSecurityGroupALBs
+        - !If [ cWebAccessSG, !Ref rSecurityGroupAlbWithSG, !Ref rSecurityGroupAlbNoSG ]
+      Subnets:
+        - !Ref pDmzSubnetA
+        - !Ref pDmzSubnetB
+      Tags:
+        - Key: Name
+          Value: "Titian Mosiac ALB"
+      Type: application
+      
+  rLoadBalancerListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+        LoadBalancerArn: !Ref rApplicationLoadBalancer
+        Port: 80
+        Protocol: HTTP 
+        DefaultActions: 
+            - Type: forward
+              TargetGroupArn: !Ref rLoadBalancerTargetGroup
+    
+  rLoadBalancerTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+        VpcId: !Ref pVpcId
+        Port: 80
+        HealthCheckIntervalSeconds: 60
+        HealthCheckTimeoutSeconds: 30
+        HealthyThresholdCount: 2
+        UnhealthyThresholdCount: 10
+        Protocol: HTTP
+        Matcher: 
+          HttpCode: '200,401'
+
+  ###
+  ### Auto Scaling Group
+  ###
+  rAutoScalingGroupApp:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    DependsOn: rAutoScalingConfigApp
+    Properties:
+      AutoScalingGroupName: !Sub Titian-Mosaic-ASG-${AWS::StackName}
+      TargetGroupARNs:
+        - !Ref rLoadBalancerTargetGroup
+      VPCZoneIdentifier:
+        - !Ref pAppSubnetA
+        - !Ref pAppSubnetB
+      LaunchConfigurationName: !Ref rAutoScalingConfigApp
+      MinSize: 1
+      MaxSize: 1
+      HealthCheckType: ELB
+      HealthCheckGracePeriod: 300
+      Tags:
+        - Key: Name
+          Value: "Titian Mosiac AppServer"
+          PropagateAtLaunch: true
+    
+  rAutoScalingConfigApp:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    DependsOn:
+    - rDBInstance
+    Properties:
+      ImageId: !FindInMap [ AWSAMIRegionMap, !Ref "AWS::Region", mAppServerAMI ]
+      InstanceType: !Ref pAppServerInstanceType
+      KeyName: !Ref pEC2KeyPair
+      SecurityGroups:
+      - !Ref rSecurityGroupAppServers
+      UserData:
+        Fn::Base64: !Sub |
+          <script>"C:\\Program Files\\Titian Software\\Bootstrap\\Main\\bootstrap-mosaic.cmd" ${rDBInstance.Endpoint.Address} ${pDBName} ${pDBUsername} ${pDBPassword} ${pDNSName} Administrator </script>
+
+  rDBInstance:
+    Type: AWS::RDS::DBInstance
+    DependsOn: rSecurityGroupDB
+    Properties:
+      DBSubnetGroupName: !Ref rDBSubnetGroup
+      VPCSecurityGroups:
+      - !Ref rSecurityGroupDB
       StorageType: gp2
-      AllocatedStorage: !Ref pTitianMosaicDBAllocatedStorage
-      DBInstanceClass: !Ref pTitianMosaicDBInstanceSize
-      MasterUsername: !Ref pTitianMosaicDBUsername
-      MasterUserPassword: !Ref pTitianMosaicDBPassword
+      MultiAZ: !Ref pDbMultiAZ
+      AllocatedStorage: !Ref pDBAllocatedStorage
+      DBInstanceClass: !Ref pDBInstanceSize
+      MasterUsername: !Ref pDBUsername
+      MasterUserPassword: !Ref pDBPassword
       LicenseModel: !Ref pDatabaseEngineLicenseModel
       Engine: !Ref pDatabaseEngine
-      DBName: !Ref pTitianMosaicDBName
+      DBName: !Ref pDBName
       Tags:
       - Key: Name
         Value: Titian Mosaic DB
         
-  rTitianMosaicDBSubnetGroup:
+  rDBSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
       DBSubnetGroupDescription: Subnet group for Titian DB instances
       SubnetIds:
-      - !Ref pTitianMosaicDBSubnetA
-      - !Ref pTitianMosaicDBSubnetB
+      - !Ref pDBSubnetA
+      - !Ref pDBSubnetB
       Tags:
       - Key: Name
         Value: Titian Mosaic DB Subnet Group
 
 Outputs:
-  rTitianMosaicWebAppInstance:
-    Value: rTitianMosaicWebAppInstance
+  oTitianMosaicWebAppInstance:
+    Value: "TODO"
