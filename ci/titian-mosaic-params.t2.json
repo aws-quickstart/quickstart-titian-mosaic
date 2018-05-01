@@ -40,15 +40,15 @@
         "ParameterValue": "Test1234!#"
     },
     {
-        "ParameterKey": "pDatabaseEngine",
+        "ParameterKey": "pDBEngine",
         "ParameterValue": "oracle-se2"
     },
     {
-        "ParameterKey": "pDatabaseEngineLicenseModel",
+        "ParameterKey": "pDBEngineLicenseModel",
         "ParameterValue": "bring-your-own-license"
     },
     {
-        "ParameterKey": "pDbMultiAZ",
+        "ParameterKey": "pDBMultiAZ",
         "ParameterValue": "true"
     },
     {
