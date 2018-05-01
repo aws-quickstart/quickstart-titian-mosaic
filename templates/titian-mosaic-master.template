@@ -32,13 +32,15 @@ Metadata:
       - pDBPassword
       - pDBInstanceType
       - pDBAllocatedStorage
-      - pDatabaseEngine
-      - pDatabaseEngineLicenseModel
+      - pDBEngine
+      - pDBEngineLicenseModel
     ParameterLabels:
       QSS3KeyPrefix:
         default: Quick Start S3 Key Prefix
       QSS3BucketName:
         default: Quick Start S3 Bucket Name  
+      pAvailabilityZones:
+        default: Availability Zones
       pPrivateSubnet1CIDR:
         default: Private Subnet 1 CIDR
       pPrivateSubnet2CIDR:
@@ -52,7 +54,9 @@ Metadata:
       pSecurityGroupForWebAccess:
         default: Web Access Security Group
       pWebAccessCIDR:
-        default: If no web access security group, the CIDR you wish to have the web server accessible to
+        default: Web Access CIDR (No SG)
+      pEC2KeyPair:
+        default: EC2 Key Pair
       pDNSName: 
         default: Mosaic Server DNS Name
       pAccountName:
@@ -62,7 +66,7 @@ Metadata:
       pEC2KeyPair:
         default: Key Pair for Mosaic Server
       pAppServerInstanceType:
-        default: App Server Size
+        default: App Server Instance Type
       pDBName:
         default: Database Name
       pDBUsername:
@@ -70,14 +74,16 @@ Metadata:
       pDBPassword:
         default: Database Password
       pDBInstanceType:
-        default: Database Size
-      pDatabaseEngine:
+        default: Database Instance Type
+      pDBEngine:
         default: Database Engine
-      pDatabaseEngineLicenseModel:
+      pDBEngineLicenseModel:
         default: Database License Model
       pDBAllocatedStorage:
         default: Database Storage Capacity (GB)
-            
+      pDBMultiAZ:
+        default: Multi-AZ Amazon RDS
+
 Parameters:
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
@@ -183,11 +189,11 @@ Parameters:
     Description: Titian Mosaic Database Total storage size in GB (50 for example)
     Type: String
     Default: 50
-  pDatabaseEngine:
+  pDBEngine:
     Description: Oracle Version. Use the default.
     Type: String
     Default: oracle-se2
-  pDatabaseEngineLicenseModel: 
+  pDBEngineLicenseModel: 
     Description: Oracle license model.
     AllowedValues:
       - license-included
@@ -202,7 +208,7 @@ Parameters:
     Description: Internal DNS Apex Domain
     Type: String
     Default: ""
-  pDbMultiAZ:
+  pDBMultiAZ:
     Description: Do you want the database to be multi AZ?
     Type: String
     AllowedValues:
@@ -234,31 +240,31 @@ Resources:
       TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/titian-mosaic.template
       TimeoutInMinutes: 40
       Parameters:
-        pDNSName: !Ref pDNSName
         pAccountName: !Ref pAccountName
         pAppName: !Ref pAppName
-        pSecurityGroupForWebAccess: !Ref pSecurityGroupForWebAccess
-        pWebAccessCIDR: !Ref pWebAccessCIDR
-        pVpcId: !GetAtt rVPCStack.Outputs.VPCID
-        pDmzSubnetA: !GetAtt rVPCStack.Outputs.PublicSubnet1ID
-        pDmzSubnetB: !GetAtt rVPCStack.Outputs.PublicSubnet2ID
+        pAppServerInstanceType: !Ref pAppServerInstanceType
         pAppSubnetA: !GetAtt rVPCStack.Outputs.PublicSubnet1ID
         pAppSubnetB: !GetAtt rVPCStack.Outputs.PublicSubnet2ID
+        pDBAllocatedStorage: !Ref pDBAllocatedStorage
+        pDBEngine: !Ref pDBEngine
+        pDBEngineLicenseModel: !Ref pDBEngineLicenseModel
+        pDBInstanceType: !Ref pDBInstanceType
+        pDBMultiAZ: !Ref pDBMultiAZ
+        pDBName: !Ref pDBName
+        pDBPassword: !Ref pDBPassword
         pDBSubnetA: !GetAtt rVPCStack.Outputs.PrivateSubnet1AID
         pDBSubnetB: !GetAtt rVPCStack.Outputs.PrivateSubnet2AID
-        pEC2KeyPair: !Ref pEC2KeyPair
-        pAppServerInstanceType: !Ref pAppServerInstanceType
-        pDBName: !Ref pDBName
         pDBUsername: !Ref pDBUsername
-        pDBPassword: !Ref pDBPassword
-        pDBInstanceType: !Ref pDBInstanceType
-        pDatabaseEngine: !Ref pDatabaseEngine
-        pDatabaseEngineLicenseModel: !Ref pDatabaseEngineLicenseModel
-        pDBAllocatedStorage: !Ref pDBAllocatedStorage
+        pDmzSubnetA: !GetAtt rVPCStack.Outputs.PublicSubnet1ID
+        pDmzSubnetB: !GetAtt rVPCStack.Outputs.PublicSubnet2ID
         pDnsHostedZoneID: !Ref pDnsHostedZoneID
         pDnsHostedZoneApexDomain: !Ref pDnsHostedZoneApexDomain
-        pDbMultiAZ: !Ref pDbMultiAZ
-      
+        pEC2KeyPair: !Ref pEC2KeyPair
+        pDNSName: !Ref pDNSName
+        pSecurityGroupForWebAccess: !Ref pSecurityGroupForWebAccess
+        pVpcId: !GetAtt rVPCStack.Outputs.VPCID
+        pWebAccessCIDR: !Ref pWebAccessCIDR
+
 Outputs:
   rTitianMosaicWebAppInstance:
     Value: !GetAtt rTitianFreezerManagement.Outputs.oLoadBalancerArn

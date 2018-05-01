@@ -37,9 +37,9 @@ Metadata:
       - pDBPassword
       - pDBInstanceType
       - pDBAllocatedStorage
-      - pDatabaseEngine
-      - pDatabaseEngineLicenseModel
-      - pDbMultiAZ
+      - pDBEngine
+      - pDBEngineLicenseModel
+      - pDBMultiAZ
     ParameterLabels:
       pDNSName: 
         default: Mosaic Server DNS Name
@@ -79,15 +79,15 @@ Metadata:
         default: Database Password
       pDBInstanceTypee:
         default: Database Instance Type
-      pDatabaseEngine:
+      pDBEngine:
         default: Database Engine
-      pDatabaseEngineLicenseModel:
+      pDBEngineLicenseModel:
         default: Database License Model
       pDBAllocatedStorage:
         default: Database Storage Capacity (GB)   
       pLoadBalancerType:
         default: Type of load balancer (internal/external)
-      pDbMultiAZ:
+      pDBMultiAZ:
         default: Do you want the database to be configured for high availability?
 Parameters:
   pDNSName:
@@ -117,7 +117,9 @@ Parameters:
   pLoadBalancerType:
     Default: internet-facing
     Type: String
-    AllowedValues: ["internet-facing", "internal"]
+    AllowedValues: 
+      - internet-facing
+      - internal
   pSecurityGroupForWebAccess:
     Description: Security group for web access
     Type: String
@@ -158,19 +160,19 @@ Parameters:
   pDBSubnetB:
     Description: Subnet ID for Production DB Subnet B. Use 'Production DB Subnet B' in the filter.
     Type: AWS::EC2::Subnet::Id
-  pDatabaseEngine:
+  pDBEngine:
     # Should change this to allowed values
     Description: Oracle Version. Use the default.
     Type: String
     Default: oracle-se2
-  pDatabaseEngineLicenseModel: 
+  pDBEngineLicenseModel: 
     Description: Oracle license model.
     AllowedValues:
       - license-included
       - bring-your-own-license
     Type: String
     Default: license-included
-  pDbMultiAZ:
+  pDBMultiAZ:
     Description: Do you want the database to be multi AZ?
     Type: String
     AllowedValues:
@@ -387,13 +389,13 @@ Resources:
       VPCSecurityGroups:
       - !Ref rSecurityGroupDB
       StorageType: gp2
-      MultiAZ: !Ref pDbMultiAZ
+      MultiAZ: !Ref pDBMultiAZ
       AllocatedStorage: !Ref pDBAllocatedStorage
       DBInstanceClass: !Ref pDBInstanceType
       MasterUsername: !Ref pDBUsername
       MasterUserPassword: !Ref pDBPassword
-      LicenseModel: !Ref pDatabaseEngineLicenseModel
-      Engine: !Ref pDatabaseEngine
+      LicenseModel: !Ref pDBEngineLicenseModel
+      Engine: !Ref pDBEngine
       Tags:
       - Key: Name
         Value: Titian Mosaic DB
@@ -410,5 +412,5 @@ Resources:
         Value: Titian Mosaic DB Subnet Group
 
 Outputs:
-  oLoadBalancerArn:
-    Value: !Ref rApplicationLoadBalancer
+  oLoadBalancerDNS:
+    Value: !GetAtt rApplicationLoadBalancer.DNSName
