@@ -32,10 +32,10 @@ Metadata:
     - Label:
         default: Amazon RDS Configuration
       Parameters:
-      - pDBName              
+      - pDBName
       - pDBUsername
       - pDBPassword
-      - pDBInstanceSize
+      - pDBInstanceType
       - pDBAllocatedStorage
       - pDatabaseEngine
       - pDatabaseEngineLicenseModel
@@ -68,7 +68,7 @@ Metadata:
       pDBSubnetB:
         default: Database Subnet B
       pEC2KeyPair:
-        default: Key Pair for Mosaic Server            
+        default: Key Pair for Mosaic Server
       pAppServerInstanceType:
         default: App Server Size
       pDBName:
@@ -76,9 +76,9 @@ Metadata:
       pDBUsername:
         default: Database User/Owner
       pDBPassword:
-        default: Database Password        
-      pDBInstanceSize:
-        default: Database Size
+        default: Database Password
+      pDBInstanceTypee:
+        default: Database Instance Type
       pDatabaseEngine:
         default: Database Engine
       pDatabaseEngineLicenseModel:
@@ -136,11 +136,6 @@ Parameters:
   pVpcId:
     Description: Production VPC ID.
     Type: AWS::EC2::VPC::Id
-  pDBName:
-    Description: Titian Mosaic FreezerMgmt Database Name
-    Type: String
-    MaxLength: 8
-    Default: mosaic
   pDBUsername:
     Description: Titian Mosaic FreezerMgmt Database User/Owner
     Type: String
@@ -149,7 +144,7 @@ Parameters:
     Description: Titian Mosaic FreezerMgmt Database User/Owner Password
     Type: String
     NoEcho: true
-  pDBInstanceSize:
+  pDBInstanceType:
     Description: Titian Mosaic FreezerMgmt Database Size (db.t2.large for example)
     Type: String
     Default: db.t2.large
@@ -178,8 +173,10 @@ Parameters:
   pDbMultiAZ:
     Description: Do you want the database to be multi AZ?
     Type: String
-    AllowedValues: ['true', 'false']
-    Default: false
+    AllowedValues:
+    - "true"
+    - "false"
+    Default: "false"
   pDnsHostedZoneID:
     Description: Internal DNS hosted zone ID.
     Type: String
@@ -188,6 +185,11 @@ Parameters:
     Description: Internal DNS Apex Domain
     Type: String      
     Default: ""
+  pDBName:
+    Description: Titian Mosaic FreezerMgmt Database Name
+    Type: String
+    MaxLength: 8
+    Default: mosaic
 Mappings:
   AWSAMIRegionMap:
     us-east-1:
@@ -387,12 +389,11 @@ Resources:
       StorageType: gp2
       MultiAZ: !Ref pDbMultiAZ
       AllocatedStorage: !Ref pDBAllocatedStorage
-      DBInstanceClass: !Ref pDBInstanceSize
+      DBInstanceClass: !Ref pDBInstanceType
       MasterUsername: !Ref pDBUsername
       MasterUserPassword: !Ref pDBPassword
       LicenseModel: !Ref pDatabaseEngineLicenseModel
       Engine: !Ref pDatabaseEngine
-      DBName: !Ref pDBName
       Tags:
       - Key: Name
         Value: Titian Mosaic DB
@@ -409,5 +410,5 @@ Resources:
         Value: Titian Mosaic DB Subnet Group
 
 Outputs:
-  oTitianMosaicWebAppInstance:
-    Value: "TODO"
+  oLoadBalancerArn:
+    Value: !Ref rApplicationLoadBalancer

@@ -9,23 +9,23 @@
     },
     {
         "ParameterKey": "pPrivateSubnet1CIDR",
-        "ParameterValue": "10.250.32.0/20"
+        "ParameterValue": "10.241.32.0/20"
     },
     {
         "ParameterKey": "pPrivateSubnet2CIDR",
-        "ParameterValue": "10.250.48.0/20"
+        "ParameterValue": "10.241.48.0/20"
     },
     {
         "ParameterKey": "pPublicSubnet1CIDR",
-        "ParameterValue": "10.250.0.0/20"
+        "ParameterValue": "10.241.0.0/20"
     },
     {
         "ParameterKey": "pPublicSubnet2CIDR",
-        "ParameterValue": "10.250.16.0/20"
+        "ParameterValue": "10.241.16.0/20"
     },
     {
         "ParameterKey": "pVPCCIDR",
-        "ParameterValue": "10.250.0.0/16"
+        "ParameterValue": "10.241.0.0/16"
     },
     {
         "ParameterKey": "QSS3BucketName",
@@ -36,19 +36,27 @@
         "ParameterValue": "quickstart-titian-mosaic/"
     },
     {
-        "ParameterKey": "pTitianMosaicDBPassword",
+        "ParameterKey": "pDBPassword",
         "ParameterValue": "Test1234!#"
     },
     {
-        "ParameterKey": "pTitianMosaicDBAllocatedStorage",
-        "ParameterValue": "50"
-    },
-    {
         "ParameterKey": "pDatabaseEngine",
-        "ParameterValue": "oracle-ee"
+        "ParameterValue": "oracle-se2"
     },
     {
         "ParameterKey": "pDatabaseEngineLicenseModel",
         "ParameterValue": "bring-your-own-license"
+    },
+    {
+        "ParameterKey": "pDbMultiAZ",
+        "ParameterValue": "true"
+    },
+    {
+        "ParameterKey": "pAppName",
+        "ParameterValue": "demo"
+    },
+    {
+        "ParameterKey": "pAccountName",
+        "ParameterValue": "testaccount"
     }
 ]

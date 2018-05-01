@@ -30,7 +30,7 @@ Metadata:
       - pDBName              
       - pDBUsername
       - pDBPassword
-      - pDBInstanceSize
+      - pDBInstanceType
       - pDBAllocatedStorage
       - pDatabaseEngine
       - pDatabaseEngineLicenseModel
@@ -60,7 +60,7 @@ Metadata:
       pAppName:
         default: Titian Mosaic App Name
       pEC2KeyPair:
-        default: Key Pair for Mosaic Server            
+        default: Key Pair for Mosaic Server
       pAppServerInstanceType:
         default: App Server Size
       pDBName:
@@ -68,8 +68,8 @@ Metadata:
       pDBUsername:
         default: Database User/Owner
       pDBPassword:
-        default: Database Password        
-      pDBInstanceSize:
+        default: Database Password
+      pDBInstanceType:
         default: Database Size
       pDatabaseEngine:
         default: Database Engine
@@ -84,7 +84,7 @@ Parameters:
     ConstraintDescription: Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
       (-).
-    Default: quickstart-reference
+    Default: aws-quickstart
     Description: S3 bucket name for the Quick Start assets. Quick Start bucket name
       can include numbers, lowercase letters, uppercase letters, and hyphens (-).
       It cannot start or end with a hyphen (-).
@@ -143,12 +143,10 @@ Parameters:
     Description: This is the account named agreed upon by the company and Titian. Used for licensing purposes. Typically, this is the company name. This parameter must be all lower case and only alphanumeric values.
     Type: String
     AllowedPattern : ^[a-z0-9]*$
-    Default: demo
   pAppName:
     Description: Similar to the Account Name parameter, this is the app named agreed upon by the company and Titian. Used for licensing purposes. Typically, this is the lab name. This parameter must be all lower case and only alphanumeric values.
     Type: String
     AllowedPattern : ^[a-z0-9]*$
-    Default: demo
   pSecurityGroupForWebAccess:
     Description: Security group for web access
     Type: String
@@ -177,13 +175,14 @@ Parameters:
     Description: Titian Mosaic Database User/Owner Password
     Type: String
     NoEcho: true
-  pDBInstanceSize:
+  pDBInstanceType:
     Description: Titian Mosaic Database Size (db.t2.large for example)
     Type: String
     Default: db.t2.large
   pDBAllocatedStorage:
-    Description: Titian Mosaic Database Total storage size in GB (100 for example)
+    Description: Titian Mosaic Database Total storage size in GB (50 for example)
     Type: String
+    Default: 50
   pDatabaseEngine:
     Description: Oracle Version. Use the default.
     Type: String
@@ -203,6 +202,13 @@ Parameters:
     Description: Internal DNS Apex Domain
     Type: String
     Default: ""
+  pDbMultiAZ:
+    Description: Do you want the database to be multi AZ?
+    Type: String
+    AllowedValues:
+    - "true"
+    - "false"
+    Default: "false"
 
 Resources:
   rVPCStack:
@@ -245,13 +251,14 @@ Resources:
         pDBName: !Ref pDBName
         pDBUsername: !Ref pDBUsername
         pDBPassword: !Ref pDBPassword
-        pDBInstanceSize: db.t2.large
+        pDBInstanceType: !Ref pDBInstanceType
         pDatabaseEngine: !Ref pDatabaseEngine
         pDatabaseEngineLicenseModel: !Ref pDatabaseEngineLicenseModel
-        pDBAllocatedStorage: 50
+        pDBAllocatedStorage: !Ref pDBAllocatedStorage
         pDnsHostedZoneID: !Ref pDnsHostedZoneID
         pDnsHostedZoneApexDomain: !Ref pDnsHostedZoneApexDomain
+        pDbMultiAZ: !Ref pDbMultiAZ
       
 Outputs:
   rTitianMosaicWebAppInstance:
-    Value: !GetAtt rTitianFreezerManagement.Outputs.rTitianMosaicWebAppInstance
+    Value: !GetAtt rTitianFreezerManagement.Outputs.oLoadBalancerArn
