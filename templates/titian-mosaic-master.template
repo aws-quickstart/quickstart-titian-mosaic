@@ -13,6 +13,7 @@ Metadata:
     - Label:
         default: Network Configuration
       Parameters:
+      - pAvailabilityZones
       - pVPCCIDR
       - pPublicSubnet1CIDR
       - pPublicSubnet2CIDR
@@ -71,7 +72,7 @@ Metadata:
       pDNSName: 
         default: Mosaic Server DNS Name
       pEC2KeyPair:
-        default: Key Pair for Mosaic Server
+        default: Key Pair for Server
       pLoadBalancerType:
         default: Load Balancer Type
       pPrivateSubnet1CIDR:
@@ -87,11 +88,11 @@ Metadata:
       pVPCCIDR:
         default: VPC CIDR  
       pWebAccessCIDR:
-        default: Web Access CIDR (No SG) 
+        default: Web Access CIDR (No SG)
       QSS3KeyPrefix:
         default: Quick Start S3 Key Prefix
       QSS3BucketName:
-        default: Quick Start S3 Bucket Name  
+        default: Quick Start S3 Bucket Name
 
 Parameters:
   pAccountName:
@@ -126,11 +127,11 @@ Parameters:
     Type: String
     Default: license-included
   pDBAllocatedStorage:
-    Description: Titian Mosaic Database Total storage size in GB. Default is 50 GB.
+    Description: Database Total storage size in GB. Default is 50 GB.
     Type: String
     Default: 50 
   pDBInstanceType:
-    Description: Titian Mosaic Database Size. Default is db.t2.large.
+    Description: Database Size. Default is db.t2.large.
     Type: String
     Default: db.t2.large
   pDBMultiAZ:
@@ -166,7 +167,7 @@ Parameters:
     Type: String
     Default: mosaic
   pEC2KeyPair:
-    Description: Key Name for Mosaic server.
+    Description: Key Name for server.
     Type: AWS::EC2::KeyPair::KeyName 
   pLoadBalancerType:
     Default: internet-facing
@@ -286,6 +287,6 @@ Resources:
         pWebAccessCIDR: !Ref pWebAccessCIDR
 
 Outputs:
-  oTitianMosaicWebAppInstance:
+  oWebAppInstance:
     Description: DNS of Load Balancer to access Titian Mosaic
     Value: !GetAtt rTitianMosaic.Outputs.oLoadBalancerDNS
