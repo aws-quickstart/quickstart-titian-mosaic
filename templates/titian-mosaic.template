@@ -106,6 +106,16 @@ Parameters:
     Description: Titian FreezerMgmt app server EC2 instance type
     Type: String
     Default: t2.large
+    AllowedValues: 
+      - t2.medium
+      - t2.large
+      - t2.xlarge
+      - m5.large
+      - m5.xlarge
+      - m5.2xlarge
+      - m4.large
+      - m4.xlarge
+      - m4.2xlarge
   pAppSubnetA:
     Description: Production App Subnet A. Target subnet for the app server. 
     Type: AWS::EC2::Subnet::Id
@@ -134,6 +144,17 @@ Parameters:
     Description: Database instance class. Default is db.t2.large.
     Type: String
     Default: db.t2.large
+    AllowedValues: 
+      - db.t2.medium
+      - db.t2.large
+      - db.t2.xlarge
+      - db.t2.2xlarge
+      - db.r4.large
+      - db.r4.xlarge
+      - db.r4.2xlarge
+      - db.m4.large
+      - db.m4.xlarge
+      - db.m4.2xlarge
   pDBMultiAZ:
     Description: Multi-AZ Amazon RDS Configuration. true/false - default is false.
     Type: String
@@ -167,11 +188,11 @@ Parameters:
     Description: Production DMZ Subnet B. Target subnet for the app server. 
     Type: AWS::EC2::Subnet::Id
   pDnsHostedZoneApexDomain:
-    Description: Internal DNS Apex Domain
+    Description: (Optional) Internal DNS Apex Domain
     Type: String
     Default: ""
   pDnsHostedZoneID:
-    Description: Internal DNS hosted zone ID.
+    Description: (Optional) Internal DNS hosted zone ID.
     Type: String
     Default: ""
   pDNSName:
@@ -195,9 +216,9 @@ Parameters:
     Description: VPC ID
     Type: AWS::EC2::VPC::Id
   pWebAccessCIDR:
-    Description: Will only be used if Web Access Security Group is not specified. Default is open to world.
+    Description: Will only be used if Web Access Security Group is not specified. Enter 0.0.0.0/0 if you want to open it to the world.
     Type: String
-    Default: "0.0.0.0/0"
+    Default: "10.0.0.0/16"
 
 Mappings:
   AWSAMIRegionMap:
