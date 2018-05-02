@@ -313,6 +313,6 @@ Resources:
         pWebAccessCIDR: !Ref pWebAccessCIDR
 
 Outputs:
-  oWebAppInstance:
+  oLoadBalancerDNS:
     Description: DNS of Load Balancer to access Titian Mosaic
     Value: !GetAtt rTitianMosaic.Outputs.oLoadBalancerDNS
