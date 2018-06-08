@@ -5,7 +5,7 @@
     },
     {
         "ParameterKey": "pEC2KeyPair",
-        "ParameterValue": "ajfriedm-hclscollab-taskcat-iad"
+        "ParameterValue": "KeyPairEast"
     },
     {
         "ParameterKey": "pPrivateSubnet1CIDR",
@@ -29,26 +29,42 @@
     },
     {
         "ParameterKey": "QSS3BucketName",
-        "ParameterValue": "ajfriedm-hclscollab-taskcat-bucket"
+        "ParameterValue": "paulu-hclscollab-taskcat-bucket"
     },
     {
         "ParameterKey": "QSS3KeyPrefix",
         "ParameterValue": "quickstart-titian-mosaic/"
     },
     {
-        "ParameterKey": "pTitianMosaicDBPassword",
+        "ParameterKey": "pDBPassword",
         "ParameterValue": "Test1234!#"
     },
     {
-        "ParameterKey": "pTitianMosaicDBAllocatedStorage",
-        "ParameterValue": "50"
+        "ParameterKey": "pDBAllocatedStorage",
+        "ParameterValue": "10"
     },
     {
         "ParameterKey": "pDatabaseEngine",
-        "ParameterValue": "oracle-ee"
+        "ParameterValue": "oracle-se2"
     },
     {
         "ParameterKey": "pDatabaseEngineLicenseModel",
         "ParameterValue": "bring-your-own-license"
-    }
+    }, 
+    {
+        "ParameterKey": "pAppName",
+        "ParameterValue": "demo"
+    },
+    {
+        "ParameterKey": "pAccountName",
+        "ParameterValue": "demo"
+    }, 
+    {
+        "ParameterKey": "pDnsHostedZoneID",
+        "ParameterValue": "Z4M3QOBWCZGZA"
+    },
+    {
+        "ParameterKey": "pDnsHostedZoneApexDomain",
+        "ParameterValue": "underwoodpaul.com"
+    }  
 ]

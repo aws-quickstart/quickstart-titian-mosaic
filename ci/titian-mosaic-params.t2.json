@@ -1,0 +1,58 @@
+[
+    {
+        "ParameterKey": "pEC2KeyPair",
+        "ParameterValue": "paulu-hclscollab-taskcat"
+    },
+    {
+        "ParameterKey": "pAppServerInstanceType",
+        "ParameterValue": "t2.large"
+    },
+    {
+        "ParameterKey": "pVpcId",
+        "ParameterValue": "vpc-7b073e02"
+    },
+    {
+        "ParameterKey": "pDmzSubnetA",
+        "ParameterValue": "subnet-6f5ce524"
+    },
+    {
+        "ParameterKey": "pDmzSubnetB",
+        "ParameterValue": "subnet-bde679c4"
+    },
+    {
+        "ParameterKey": "pAppSubnetA",
+        "ParameterValue": "subnet-4e58e105"
+    },
+    {
+        "ParameterKey": "pAppSubnetB",
+        "ParameterValue": "subnet-18e67961"
+    },
+    {
+        "ParameterKey": "pDBSubnetA",
+        "ParameterValue": "subnet-3958e172"
+    },
+    {
+        "ParameterKey": "pDBSubnetB",
+        "ParameterValue": "subnet-b6e57acf"
+    },
+    {
+        "ParameterKey": "pDBPassword",
+        "ParameterValue": "Gir123#a"
+    }, 
+    {
+        "ParameterKey": "pAppName",
+        "ParameterValue": "demo"
+    },
+    {
+        "ParameterKey": "pAccountName",
+        "ParameterValue": "demo"
+    }, 
+    {
+        "ParameterKey": "pDnsHostedZoneID",
+        "ParameterValue": "Z4M3QOBWCZGZA"
+    },
+    {
+        "ParameterKey": "pDnsHostedZoneApexDomain",
+        "ParameterValue": "underwoodpaul.com"
+    }
+]

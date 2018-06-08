@@ -93,7 +93,7 @@ Parameters:
   pDNSName:
     Description: The internal DNS CNAME to be used for the Mosaic server. Leave the default if you are unsure of what this does.
     Type: String
-    Default: screener
+    Default: mosaic
   pAccountName:
     Description: This is the account named agreed upon by the company and Titian. Used for licensing purposes. Typically, this is the company name. This parameter must be all lower case and only alphanumeric values.
     Type: String
@@ -191,11 +191,11 @@ Parameters:
 Mappings:
   AWSAMIRegionMap:
     us-east-1:
-      mAppServerAMI: ami-13768e6e
+      mAppServerAMI: ami-918610ee
     us-west-2:
-      mAppServerAMI: ami-7b76ed03
+      mAppServerAMI: ami-399eec41
     eu-west-1:
-      mAppServerAMI: ami-7d702204 
+      mAppServerAMI: ami-a69babdf 
 Conditions:
   cDNSRecord: !Not [ !Or [ !Equals [!Ref pDnsHostedZoneID, ""] , !Equals [!Ref pDnsHostedZoneApexDomain, ""] ] ]
   cWebAccessSG: !Not [ !Equals [ !Ref pSecurityGroupForWebAccess, "" ] ]
@@ -212,7 +212,13 @@ Resources:
       TTL: 60
       ResourceRecords:
         - !GetAtt rApplicationLoadBalancer.DNSName
-
+  rALBCertificate:
+    Type: "AWS::CertificateManager::Certificate"
+    Properties: 
+      DomainName: !Sub ${pDNSName}.${pDnsHostedZoneApexDomain}
+      DomainValidationOptions:
+      - DomainName: !Sub ${pDNSName}.${pDnsHostedZoneApexDomain}
+        ValidationDomain: !Ref pDnsHostedZoneApexDomain
 
   ###
   ### Security Groups
@@ -317,28 +323,55 @@ Resources:
           Value: "Titian Mosiac ALB"
       Type: application
       
-  rLoadBalancerListener:
+  rLoadBalancerListenerHTTP:
     Type: AWS::ElasticLoadBalancingV2::Listener
     Properties:
         LoadBalancerArn: !Ref rApplicationLoadBalancer
         Port: 80
-        Protocol: HTTP 
+        Protocol: HTTP
         DefaultActions: 
             - Type: forward
-              TargetGroupArn: !Ref rLoadBalancerTargetGroup
-    
-  rLoadBalancerTargetGroup:
+              TargetGroupArn: !Ref rLoadBalancerTargetGroupHTTP
+      
+  rLoadBalancerListenerHTTPS:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+        Certificates:
+          - CertificateArn: !Ref rALBCertificate
+        LoadBalancerArn: !Ref rApplicationLoadBalancer
+        Port: 443
+        Protocol: HTTPS 
+        DefaultActions: 
+            - Type: forward
+              TargetGroupArn: !Ref rLoadBalancerTargetGroupHTTPS
+  
+  rLoadBalancerTargetGroupHTTP:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
         VpcId: !Ref pVpcId
         Port: 80
-        HealthCheckIntervalSeconds: 60
+        HealthCheckIntervalSeconds: 180
         HealthCheckTimeoutSeconds: 30
-        HealthyThresholdCount: 2
+        HealthyThresholdCount: 2  
+        HealthCheckPort: 80
         UnhealthyThresholdCount: 10
         Protocol: HTTP
         Matcher: 
-          HttpCode: '200,401'
+          HttpCode: '200,401,302'
+  
+  rLoadBalancerTargetGroupHTTPS:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+        VpcId: !Ref pVpcId
+        Port: 443
+        HealthCheckIntervalSeconds: 180
+        HealthCheckTimeoutSeconds: 30
+        HealthyThresholdCount: 2  
+        HealthCheckPort: 443
+        UnhealthyThresholdCount: 10
+        Protocol: HTTPS
+        Matcher: 
+          HttpCode: '200,401,302'
 
   ###
   ### Auto Scaling Group
@@ -349,7 +382,8 @@ Resources:
     Properties:
       AutoScalingGroupName: !Sub Titian-Mosaic-ASG-${AWS::StackName}
       TargetGroupARNs:
-        - !Ref rLoadBalancerTargetGroup
+        - !Ref rLoadBalancerTargetGroupHTTPS
+        - !Ref rLoadBalancerTargetGroupHTTP
       VPCZoneIdentifier:
         - !Ref pAppSubnetA
         - !Ref pAppSubnetB
@@ -357,7 +391,7 @@ Resources:
       MinSize: 1
       MaxSize: 1
       HealthCheckType: ELB
-      HealthCheckGracePeriod: 300
+      HealthCheckGracePeriod: 900
       Tags:
         - Key: Name
           Value: "Titian Mosiac AppServer"
