@@ -213,11 +213,11 @@ Parameters:
 Mappings:
   AWSAMIRegionMap:
     us-east-1:
-      mAppServerAMI: ami-918610ee
+      mAppServerAMI: ami-df0d4ea0
     us-west-2:
-      mAppServerAMI: ami-399eec41
+      mAppServerAMI: ami-c95c1eb1
     eu-west-1:
-      mAppServerAMI: ami-a69babdf 
+      mAppServerAMI: ami-e6e5e99f 
 Conditions:
   cDNSRecord: !Not [ !Or [ !Equals [!Ref pDnsHostedZoneID, ""] , !Equals [!Ref pDnsHostedZoneApexDomain, ""] ] ]
   cWebAccessSG: !Not [ !Equals [ !Ref pSecurityGroupForWebAccess, "" ] ]
@@ -440,7 +440,7 @@ Resources:
           
           & "C:\\Program Files\\Titian Software\\Bootstrap\\Main\\bootstrap-mosaic.cmd" ${rDBInstance.Endpoint.Address} ${pDBName} ${pDBUsername} ${pDBPassword} ${pDNSName} Administrator
           
-          cfn-signal -e $lastexitcode ${rAppServerInitWaitHandle}
+          cfn-signal -e $lastexitcode "'${rAppServerInitWaitHandle}'"
           </powershell>
           <persist>true</persist>
   ###
