@@ -52,14 +52,6 @@
         "ParameterValue": "bring-your-own-license"
     }, 
     {
-        "ParameterKey": "pAppName",
-        "ParameterValue": "demo"
-    },
-    {
-        "ParameterKey": "pAccountName",
-        "ParameterValue": "demo"
-    }, 
-    {
         "ParameterKey": "pDnsHostedZoneID",
         "ParameterValue": "Z4M3QOBWCZGZA"
     },

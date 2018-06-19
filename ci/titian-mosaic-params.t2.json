@@ -40,14 +40,6 @@
         "ParameterValue": "Gir123#a"
     }, 
     {
-        "ParameterKey": "pAppName",
-        "ParameterValue": "demo"
-    },
-    {
-        "ParameterKey": "pAccountName",
-        "ParameterValue": "demo"
-    }, 
-    {
         "ParameterKey": "pDnsHostedZoneID",
         "ParameterValue": "Z4M3QOBWCZGZA"
     },

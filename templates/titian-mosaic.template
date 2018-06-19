@@ -7,8 +7,6 @@ Metadata:
     - Label:
         default: Titian Configuration
       Parameters:
-      - pAccountName
-      - pAppName
       - pDNSName
     - Label:
         default: Network Configuration
@@ -42,10 +40,6 @@ Metadata:
       - pDBEngineLicenseModel
       - pDBMultiAZ
     ParameterLabels:
-      pAccountName:
-        default: Account Name
-      pAppName:
-        default: App Name
       pAppServerInstanceType:
         default: App Server Instance Type
       pAppSubnetA:
@@ -98,14 +92,6 @@ Parameters:
     Description: The internal DNS CNAME to be used for the Mosaic server. Leave the default if you are unsure of what this does.
     Type: String
     Default: mosaic
-  pAccountName:
-    Description: This is the account named agreed upon by the company and Titian. Used for licensing purposes. Typically, this is the company name. This parameter must be all lower case and only alphanumeric values.
-    Type: String
-    AllowedPattern : ^[a-z0-9]*$
-  pAppName:
-    Description: Similar to the Account Name parameter, this is the app named agreed upon by the company and Titian. Used for licensing purposes. Typically, this is the lab name. This parameter must be all lower case and only alphanumeric values.
-    Type: String
-    AllowedPattern : ^[a-z0-9]*$
   pAppServerInstanceType:
     Description: Titian FreezerMgmt app server EC2 instance type
     Type: String
@@ -445,7 +431,30 @@ Resources:
       - !Ref rSecurityGroupAppServers
       UserData:
         Fn::Base64: !Sub |
-          <script>"C:\\Program Files\\Titian Software\\Bootstrap\\Main\\bootstrap-mosaic.cmd" ${rDBInstance.Endpoint.Address} ${pDBName} ${pDBUsername} ${pDBPassword} ${pDNSName} Administrator </script>
+          <powershell>
+          mkdir c:\cfn\installer
+          mkdir c:\cfn\logs
+          Invoke-WebRequest -OutFile c:\cfn\installer\aws-cfn-bootstrap-win64-latest.msi https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-win64-latest.msi
+          
+          msiexec.exe /i c:\cfn\installer\aws-cfn-bootstrap-win64-latest.msi /QN /L*V "C:\cfn\logs\cfn-bootstrap-install.log"
+          
+          & "C:\\Program Files\\Titian Software\\Bootstrap\\Main\\bootstrap-mosaic.cmd" ${rDBInstance.Endpoint.Address} ${pDBName} ${pDBUsername} ${pDBPassword} ${pDNSName} Administrator
+          
+          cfn-signal -e $lastexitcode ${rAppServerInitWaitHandle}
+          </powershell>
+          <persist>true</persist>
+  ###
+  ### Wait Handle
+  ###
+  rAppServerInitWaitHandle:
+    Type: AWS::CloudFormation::WaitConditionHandle
+    Properties: {}
+  rAppServerInitWaitCondition:
+    Type: AWS::CloudFormation::WaitCondition
+    DependsOn: rAutoScalingGroupApp
+    Properties:
+      Handle: !Ref rAppServerInitWaitHandle
+      Timeout: '1800'
 
   ###
   ### RDS Instance
@@ -484,3 +493,7 @@ Outputs:
   oLoadBalancerDNS:
     Description: DNS of Load Balancer to access Titian Mosaic
     Value: !GetAtt rApplicationLoadBalancer.DNSName
+  oInternalDNSUrl:
+    Condition: cDNSRecord
+    Description: URL to Load Balancer to access ChemAxon Compound Registry
+    Value: !Sub http://mosaic.${pDnsHostedZoneApexDomain}

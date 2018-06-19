@@ -7,8 +7,6 @@ Metadata:
     - Label:
         default: Titian Configuration
       Parameters:
-      - pAccountName
-      - pAppName
       - pDNSName
     - Label:
         default: Network Configuration
@@ -46,10 +44,6 @@ Metadata:
       - QSS3BucketName
       - QSS3KeyPrefix
     ParameterLabels:
-      pAccountName:
-        default: Titian Mosaic Account Name
-      pAppName:
-        default: Titian Mosaic App Name
       pAppServerInstanceType:
         default: App Server Instance Type
       pAvailabilityZones:
@@ -100,14 +94,6 @@ Metadata:
         default: Quick Start S3 Bucket Name
 
 Parameters:
-  pAccountName:
-    Description: This is the account named agreed upon by the company and Titian. Used for licensing purposes. Typically, this is the company name. This parameter must be all lower case and only alphanumeric values.
-    Type: String
-    AllowedPattern : ^[a-z0-9]*$
-  pAppName:
-    Description: Similar to the Account Name parameter, this is the app named agreed upon by the company and Titian. Used for licensing purposes. Typically, this is the lab name. This parameter must be all lower case and only alphanumeric values.
-    Type: String
-    AllowedPattern : ^[a-z0-9]*$
   pAppServerInstanceType:
     Description: Titian Mosaic app server EC2 instance type
     Type: String
@@ -286,8 +272,6 @@ Resources:
     Properties:
       TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/titian-mosaic.template
       Parameters:
-        pAccountName: !Ref pAccountName
-        pAppName: !Ref pAppName
         pAppServerInstanceType: !Ref pAppServerInstanceType
         pAppSubnetA: !GetAtt rVPCStack.Outputs.PublicSubnet1ID
         pAppSubnetB: !GetAtt rVPCStack.Outputs.PublicSubnet2ID
