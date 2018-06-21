@@ -440,7 +440,7 @@ Resources:
           
           & "C:\\Program Files\\Titian Software\\Bootstrap\\Main\\bootstrap-mosaic.cmd" ${rDBInstance.Endpoint.Address} ${pDBName} ${pDBUsername} ${pDBPassword} ${pDNSName} Administrator
           
-          cfn-signal -e $lastexitcode "'${rAppServerInitWaitHandle}'"
+          & "C:\\Program Files\\Amazon\\cfn-bootstrap\\cfn-signal.exe" -e $lastexitcode "${rAppServerInitWaitHandle}"
           </powershell>
           <persist>true</persist>
   ###
@@ -469,6 +469,8 @@ Resources:
       StorageType: gp2
       MultiAZ: !Ref pDBMultiAZ
       AllocatedStorage: !Ref pDBAllocatedStorage
+      DBInstanceIdentifier: "titian-mosaic-db"
+      DBName: !Ref pDBName
       DBInstanceClass: !Ref pDBInstanceType
       MasterUsername: !Ref pDBUsername
       MasterUserPassword: !Ref pDBPassword

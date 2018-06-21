@@ -44,11 +44,11 @@
         "ParameterValue": "10"
     },
     {
-        "ParameterKey": "pDatabaseEngine",
+        "ParameterKey": "pDBEngine",
         "ParameterValue": "oracle-se2"
     },
     {
-        "ParameterKey": "pDatabaseEngineLicenseModel",
+        "ParameterKey": "pDBEngineLicenseModel",
         "ParameterValue": "bring-your-own-license"
     }, 
     {
