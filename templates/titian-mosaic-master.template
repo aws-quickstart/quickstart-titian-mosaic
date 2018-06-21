@@ -300,3 +300,7 @@ Outputs:
   oLoadBalancerDNS:
     Description: DNS of Load Balancer to access Titian Mosaic
     Value: !GetAtt rTitianMosaic.Outputs.oLoadBalancerDNS
+  oDNSUrl:
+    Condition: cDNSRecord
+    Description: URL to Load Balancer to access ChemAxon Compound Registry
+    Value: !GetAtt rTitianMosaic.Outputs.oInternalDNSUrl
