@@ -5,7 +5,7 @@
     },
     {
         "ParameterKey": "pEC2KeyPair",
-        "ParameterValue": "KeyPairEast"
+        "ParameterValue": "paulu-hclscollab-taskcat"
     },
     {
         "ParameterKey": "pPrivateSubnet1CIDR",
@@ -29,7 +29,7 @@
     },
     {
         "ParameterKey": "QSS3BucketName",
-        "ParameterValue": "paulu-hclscollab-taskcat-bucket"
+        "ParameterValue": "$[taskcat_autobucket]"
     },
     {
         "ParameterKey": "QSS3KeyPrefix",
@@ -50,13 +50,5 @@
     {
         "ParameterKey": "pDBEngineLicenseModel",
         "ParameterValue": "bring-your-own-license"
-    }, 
-    {
-        "ParameterKey": "pDnsHostedZoneID",
-        "ParameterValue": "Z4M3QOBWCZGZA"
-    },
-    {
-        "ParameterKey": "pDnsHostedZoneApexDomain",
-        "ParameterValue": "underwoodpaul.com"
-    }  
+    } 
 ]

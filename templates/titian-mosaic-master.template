@@ -246,7 +246,8 @@ Parameters:
       forward slash (/).
     Default: quickstart-titian-mosaic/
     Type: String
-
+Conditions:
+  cDNSRecord: !Not [ !Or [ !Equals [!Ref pDnsHostedZoneID, ""] , !Equals [!Ref pDnsHostedZoneApexDomain, ""] ] ]
 Resources:
   # Deploys a VPC in two availability zones with public and private subnets
   rVPCStack:

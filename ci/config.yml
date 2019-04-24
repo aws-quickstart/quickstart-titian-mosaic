@@ -2,7 +2,6 @@ global:
   marketplace-ami: false
   owner: quickstart-eng@amazon.com
   qsname: quickstart-titian-mosaic
-  s3bucket: paulu-hclscollab-taskcat-bucket
   regions:
     - eu-west-1
     - us-east-1
@@ -14,9 +13,9 @@ tests:
     parameter_input: titian-mosaic-params.t1.json
     template_file: titian-mosaic-master.template
     regions:
-    - us-east-1
-  # quickstart-titian-mosiac:
-  #   parameter_input: titian-mosaic-params.t2.json
-  #   template_file: titian-mosaic.template
-  #   regions:
-  #   - us-west-2
+    - us-west-2
+#   quickstart-titian-mosiac:
+#     parameter_input: titian-mosaic-params.t2.json
+#     template_file: titian-mosaic.template
+#     regions:
+#     - us-west-2

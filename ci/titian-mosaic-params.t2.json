@@ -9,47 +9,39 @@
     },
     {
         "ParameterKey": "pVpcId",
-        "ParameterValue": "vpc-7b073e02"
+        "ParameterValue": "vpc-0baf9c49ae65b2eb7"
     },
     {
         "ParameterKey": "pDmzSubnetA",
-        "ParameterValue": "subnet-6f5ce524"
+        "ParameterValue": "subnet-085abb9ce19c49b9a"
     },
     {
         "ParameterKey": "pDmzSubnetB",
-        "ParameterValue": "subnet-bde679c4"
+        "ParameterValue": "subnet-0eed6aa3b2897113c"
     },
     {
         "ParameterKey": "pAppSubnetA",
-        "ParameterValue": "subnet-4e58e105"
+        "ParameterValue": "subnet-0ea7249a5d0526a5c"
     },
     {
         "ParameterKey": "pAppSubnetB",
-        "ParameterValue": "subnet-18e67961"
+        "ParameterValue": "subnet-0fcfb284dfe25ba0f"
     },
     {
         "ParameterKey": "pDBSubnetA",
-        "ParameterValue": "subnet-3958e172"
+        "ParameterValue": "subnet-0ea7249a5d0526a5c"
     },
     {
         "ParameterKey": "pDBSubnetB",
-        "ParameterValue": "subnet-b6e57acf"
+        "ParameterValue": "subnet-0fcfb284dfe25ba0f"
     },
     {
         "ParameterKey": "pDBPassword",
         "ParameterValue": "Gir123#a"
-    }, 
-    {
-        "ParameterKey": "pDnsHostedZoneID",
-        "ParameterValue": "Z4M3QOBWCZGZA"
     },
     {
-        "ParameterKey": "pDnsHostedZoneApexDomain",
-        "ParameterValue": "underwoodpaul.com"
-    },
-    {
-        "ParameterKey": "pSecurityGroupForWebAccess",
-        "ParameterValue": "sg-bb3babca"
+        "ParameterKey": "pWebAccessCIDR",
+        "ParameterValue": "0.0.0.0/0"
     },
     { 
         "ParameterKey": "pLoadBalancerType",

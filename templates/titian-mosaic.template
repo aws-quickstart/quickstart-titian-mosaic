@@ -238,6 +238,7 @@ Resources:
 
   rALBCertificate:
     Type: "AWS::CertificateManager::Certificate"
+    Condition: cDNSRecord
     Properties: 
       DomainName: !Sub ${pDNSName}.${pDnsHostedZoneApexDomain}
       DomainValidationOptions:
@@ -356,6 +357,7 @@ Resources:
       
   rLoadBalancerListenerHTTPS:
     Type: AWS::ElasticLoadBalancingV2::Listener
+    Condition: cDNSRecord
     Properties:
         Certificates:
           - CertificateArn: !Ref rALBCertificate
