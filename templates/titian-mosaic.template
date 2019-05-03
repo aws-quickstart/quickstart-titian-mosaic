@@ -93,7 +93,7 @@ Parameters:
     Type: String
     Default: mosaic
   pAppServerInstanceType:
-    Description: Titian FreezerMgmt app server EC2 instance type
+    Description: Titian Mosaic app server EC2 instance type
     Type: String
     Default: t2.large
     AllowedValues: 
@@ -127,7 +127,7 @@ Parameters:
     Type: String
     Default: license-included
   pDBAllocatedStorage:
-    Description: Database Total storage size in GB. Default is 50 GB.
+    Description: Database total storage size in GB. Default is 50 GB.
     Type: String
     Default: 50 
   pDBInstanceType:
@@ -146,39 +146,39 @@ Parameters:
       - db.m4.xlarge
       - db.m4.2xlarge
   pDBMultiAZ:
-    Description: Multi-AZ Amazon RDS Configuration. true/false - default is false.
+    Description: Multi-AZ Amazon RDS configuration. true/false - default is false.
     Type: String
     AllowedValues:
     - "true"
     - "false"
     Default: "false"
   pDBName:
-    Description: Titian Mosaic Database Name
+    Description: Titian Mosaic database name
     Type: String
     MaxLength: 8
     Default: mosaic
   pDBPassword:
-    Description: Database User/Owner Password
+    Description: Database user/owner password
     Type: String
     NoEcho: true
   pDBSubnetA:
-    Description: Subnet ID for Production DB Subnet A.
+    Description: Subnet ID for production DB subnet A.
     Type: AWS::EC2::Subnet::Id
   pDBSubnetB:
-    Description: Subnet ID for Production DB Subnet B.
+    Description: Subnet ID for production DB subnet B.
     Type: AWS::EC2::Subnet::Id
   pDBUsername:
-    Description: Database User/Owner
+    Description: Database user/owner
     Type: String
     Default: mosaicowner
   pDmzSubnetA:
-    Description: Production DMZ Subnet A. Target subnet for the app server. 
+    Description: Production DMZ subnet A. Target subnet for the app server. 
     Type: AWS::EC2::Subnet::Id
   pDmzSubnetB:
-    Description: Production DMZ Subnet B. Target subnet for the app server. 
+    Description: Production DMZ subnet B. Target subnet for the app server. 
     Type: AWS::EC2::Subnet::Id
   pDnsHostedZoneApexDomain:
-    Description: (Optional) Internal DNS Apex Domain
+    Description: (Optional) Internal DNS apex domain
     Type: String
     Default: ""
   pDnsHostedZoneID:
@@ -190,7 +190,7 @@ Parameters:
     Type: String
     Default: mosaic
   pEC2KeyPair:
-    Description: Key Name for app server.
+    Description: Key name for app server.
     Type: AWS::EC2::KeyPair::KeyName  
   pLoadBalancerType:
     Default: internet-facing
@@ -206,7 +206,7 @@ Parameters:
     Description: VPC ID
     Type: AWS::EC2::VPC::Id
   pWebAccessCIDR:
-    Description: Will only be used if Web Access Security Group is not specified. Enter 0.0.0.0/0 if you want to open it to the world.
+    Description: Will only be used if web access security group is not specified. Enter 0.0.0.0/0 if you want to open it to the world.
     Type: String
     Default: "10.0.0.0/16"
 
