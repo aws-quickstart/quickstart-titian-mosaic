@@ -1,0 +1,50 @@
+[
+    {
+        "ParameterKey": "pEC2KeyPair",
+        "ParameterValue": "paulu-hclscollab-taskcat"
+    },
+    {
+        "ParameterKey": "pAppServerInstanceType",
+        "ParameterValue": "t2.large"
+    },
+    {
+        "ParameterKey": "pVpcId",
+        "ParameterValue": "vpc-0baf9c49ae65b2eb7"
+    },
+    {
+        "ParameterKey": "pDmzSubnetA",
+        "ParameterValue": "subnet-085abb9ce19c49b9a"
+    },
+    {
+        "ParameterKey": "pDmzSubnetB",
+        "ParameterValue": "subnet-0eed6aa3b2897113c"
+    },
+    {
+        "ParameterKey": "pAppSubnetA",
+        "ParameterValue": "subnet-0ea7249a5d0526a5c"
+    },
+    {
+        "ParameterKey": "pAppSubnetB",
+        "ParameterValue": "subnet-0fcfb284dfe25ba0f"
+    },
+    {
+        "ParameterKey": "pDBSubnetA",
+        "ParameterValue": "subnet-0ea7249a5d0526a5c"
+    },
+    {
+        "ParameterKey": "pDBSubnetB",
+        "ParameterValue": "subnet-0fcfb284dfe25ba0f"
+    },
+    {
+        "ParameterKey": "pDBPassword",
+        "ParameterValue": "Gir123#a"
+    },
+    {
+        "ParameterKey": "pWebAccessCIDR",
+        "ParameterValue": "0.0.0.0/0"
+    },
+    { 
+        "ParameterKey": "pLoadBalancerType",
+        "ParameterValue": "internal"
+    }
+]
