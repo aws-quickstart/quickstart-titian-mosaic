@@ -32,6 +32,7 @@ Metadata:
         default: Amazon RDS Configuration
       Parameters:
       - pDBName
+      - pDBTimezone
       - pDBUsername
       - pDBPassword
       - pDBInstanceType
@@ -56,6 +57,8 @@ Metadata:
         default: Database Instance Type
       pDBMultiAZ:
         default: Multi-AZ Amazon RDS
+      pDBTimezone:
+        default: Database Time Zone
       pDBName:
         default: Database Name
       pDBPassword:
@@ -88,6 +91,123 @@ Metadata:
         default: Web Access CIDR (No SG)
        
 Parameters:
+  pDBTimezone:
+    Description: What time zone should we set the database to? 
+    Type: String
+    AllowedValues: 
+      - Africa/Cairo
+      - Africa/Casablanca
+      - Africa/Harare
+      - Africa/Lagos
+      - Africa/Luanda
+      - Africa/Monrovia
+      - Africa/Nairobi
+      - Africa/Tripoli
+      - Africa/Windhoek
+      - America/Araguaina
+      - America/Argentina/Buenos_Aires
+      - America/Asuncion
+      - America/Bogota
+      - America/Caracas
+      - America/Chicago
+      - America/Chihuahua
+      - America/Cuiaba
+      - America/Denver
+      - America/Detroit
+      - America/Fortaleza
+      - America/Godthab
+      - America/Guatemala
+      - America/Halifax
+      - America/Lima
+      - America/Los_Angeles
+      - America/Manaus
+      - America/Matamoros
+      - America/Mexico_City
+      - America/Monterrey
+      - America/Montevideo
+      - America/New_York
+      - America/Phoenix
+      - America/Santiago
+      - America/Sao_Paulo
+      - America/Tijuana
+      - America/Toronto
+      - Asia/Amman
+      - Asia/Ashgabat
+      - Asia/Baghdad
+      - Asia/Baku
+      - Asia/Bangkok
+      - Asia/Beirut
+      - Asia/Calcutta
+      - Asia/Damascus
+      - Asia/Dhaka
+      - Asia/Hong_Kong
+      - Asia/Irkutsk
+      - Asia/Jakarta
+      - Asia/Jerusalem
+      - Asia/Kabul
+      - Asia/Karachi
+      - Asia/Kathmandu
+      - Asia/Kolkata
+      - Asia/Krasnoyarsk
+      - Asia/Magadan
+      - Asia/Manila
+      - Asia/Muscat
+      - Asia/Novosibirsk
+      - Asia/Rangoon
+      - Asia/Riyadh
+      - Asia/Seoul
+      - Asia/Shanghai
+      - Asia/Singapore
+      - Asia/Taipei
+      - Asia/Tehran
+      - Asia/Tokyo
+      - Asia/Ulaanbaatar
+      - Asia/Vladivostok
+      - Asia/Yakutsk
+      - Asia/Yerevan
+      - Atlantic/Azores
+      - Atlantic/Cape_Verde
+      - Australia/Adelaide
+      - Australia/Brisbane
+      - Australia/Darwin
+      - Australia/Eucla
+      - Australia/Hobart
+      - Australia/Lord_Howe
+      - Australia/Perth
+      - Australia/Sydney
+      - Brazil/DeNoronha
+      - Brazil/East
+      - Canada/Newfoundland
+      - Canada/Saskatchewan
+      - Europe/Amsterdam
+      - Europe/Athens
+      - Europe/Berlin
+      - Europe/Dublin
+      - Europe/Helsinki
+      - Europe/Kaliningrad
+      - Europe/London
+      - Europe/Madrid
+      - Europe/Moscow
+      - Europe/Paris
+      - Europe/Prague
+      - Europe/Rome
+      - Europe/Sarajevo
+      - Pacific/Apia
+      - Pacific/Auckland
+      - Pacific/Chatham
+      - Pacific/Fiji
+      - Pacific/Guam
+      - Pacific/Honolulu
+      - Pacific/Kiritimati
+      - Pacific/Marquesas
+      - Pacific/Samoa
+      - Pacific/Tongatapu
+      - Pacific/Wake
+      - US/Alaska
+      - US/Central
+      - US/East-Indiana
+      - US/Eastern
+      - US/Pacific
   pDNSName:
     Description: The internal DNS CNAME to be used for the Mosaic server. Leave the default if you are unsure of what this does.
     Type: String
@@ -419,7 +539,7 @@ Resources:
       HealthCheckGracePeriod: 900
       Tags:
         - Key: Name
-          Value: "Titian Mosiac AppServer"
+          Value: "Titian Mosaic AppServer"
           PropagateAtLaunch: true
   rAutoScalingConfigApp:
     Type: AWS::AutoScaling::LaunchConfiguration
@@ -461,6 +581,20 @@ Resources:
   ###
   ### RDS Instance
   ###
+  
+  rDBOptionGroup:
+    Type: AWS::RDS::OptionGroup
+    Properties: 
+      OptionGroupDescription : "Timezone option config for Titian database."
+      EngineName: !Ref pDBEngine
+      MajorEngineVersion: "12.1"
+      OptionConfigurations: 
+        - 
+          OptionName: Timezone
+          OptionSettings: 
+            - 
+              Name: TIME_ZONE
+              Value: !Ref pDBTimezone
   rDBInstance:
     Type: AWS::RDS::DBInstance
     DependsOn: rSecurityGroupDB
@@ -472,6 +606,7 @@ Resources:
       MultiAZ: !Ref pDBMultiAZ
       AllocatedStorage: !Ref pDBAllocatedStorage
       DBInstanceIdentifier: "titian-mosaic-db"
+      OptionGroupName: !Ref rDBOptionGroup
       DBName: !Ref pDBName
       DBInstanceClass: !Ref pDBInstanceType
       MasterUsername: !Ref pDBUsername
