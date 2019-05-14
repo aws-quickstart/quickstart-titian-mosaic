@@ -46,5 +46,9 @@
     { 
         "ParameterKey": "pLoadBalancerType",
         "ParameterValue": "internal"
+    },
+    {
+        "ParameterKey": "pDBTimezone",
+        "ParameterValue": "US/Central"
     }
 ]

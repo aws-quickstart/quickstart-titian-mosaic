@@ -7,15 +7,9 @@ global:
     - us-east-1
     - us-west-2
   reporting: true
- 
 tests:
   quickstart-biotech-blueprintt1:
     parameter_input: titian-mosaic-params.t1.json
     template_file: titian-mosaic-master.template
     regions:
-    - us-west-2
-#   quickstart-titian-mosiac:
-#     parameter_input: titian-mosaic-params.t2.json
-#     template_file: titian-mosaic.template
-#     regions:
-#     - us-west-2
+      - eu-west-1

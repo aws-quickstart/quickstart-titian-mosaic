@@ -32,6 +32,7 @@ Metadata:
       Parameters:
         - pDBName
         - pDBUsername
+        - pDBTimezone
         - pDBPassword
         - pDBInstanceType
         - pDBAllocatedStorage
@@ -44,6 +45,8 @@ Metadata:
       - QSS3BucketName
       - QSS3KeyPrefix
     ParameterLabels:
+      pDBTimezone: 
+        default: DB Time Zone
       pAppServerInstanceType:
         default: App Server Instance Type
       pAvailabilityZones:
@@ -94,6 +97,124 @@ Metadata:
         default: Quick Start S3 Bucket Name
 
 Parameters:
+  pDBTimezone:
+    Description: What time zone should we set the database to? 
+    Type: String
+    AllowedValues: 
+      - Africa/Cairo
+      - Africa/Casablanca
+      - Africa/Harare
+      - Africa/Lagos
+      - Africa/Luanda
+      - Africa/Monrovia
+      - Africa/Nairobi
+      - Africa/Tripoli
+      - Africa/Windhoek
+      - America/Araguaina
+      - America/Argentina/Buenos_Aires
+      - America/Asuncion
+      - America/Bogota
+      - America/Caracas
+      - America/Chicago
+      - America/Chihuahua
+      - America/Cuiaba
+      - America/Denver
+      - America/Detroit
+      - America/Fortaleza
+      - America/Godthab
+      - America/Guatemala
+      - America/Halifax
+      - America/Lima
+      - America/Los_Angeles
+      - America/Manaus
+      - America/Matamoros
+      - America/Mexico_City
+      - America/Monterrey
+      - America/Montevideo
+      - America/New_York
+      - America/Phoenix
+      - America/Santiago
+      - America/Sao_Paulo
+      - America/Tijuana
+      - America/Toronto
+      - Asia/Amman
+      - Asia/Ashgabat
+      - Asia/Baghdad
+      - Asia/Baku
+      - Asia/Bangkok
+      - Asia/Beirut
+      - Asia/Calcutta
+      - Asia/Damascus
+      - Asia/Dhaka
+      - Asia/Hong_Kong
+      - Asia/Irkutsk
+      - Asia/Jakarta
+      - Asia/Jerusalem
+      - Asia/Kabul
+      - Asia/Karachi
+      - Asia/Kathmandu
+      - Asia/Kolkata
+      - Asia/Krasnoyarsk
+      - Asia/Magadan
+      - Asia/Manila
+      - Asia/Muscat
+      - Asia/Novosibirsk
+      - Asia/Rangoon
+      - Asia/Riyadh
+      - Asia/Seoul
+      - Asia/Shanghai
+      - Asia/Singapore
+      - Asia/Taipei
+      - Asia/Tehran
+      - Asia/Tokyo
+      - Asia/Ulaanbaatar
+      - Asia/Vladivostok
+      - Asia/Yakutsk
+      - Asia/Yerevan
+      - Atlantic/Azores
+      - Atlantic/Cape_Verde
+      - Australia/Adelaide
+      - Australia/Brisbane
+      - Australia/Darwin
+      - Australia/Eucla
+      - Australia/Hobart
+      - Australia/Lord_Howe
+      - Australia/Perth
+      - Australia/Sydney
+      - Brazil/DeNoronha
+      - Brazil/East
+      - Canada/Newfoundland
+      - Canada/Saskatchewan
+      - Europe/Amsterdam
+      - Europe/Athens
+      - Europe/Berlin
+      - Europe/Dublin
+      - Europe/Helsinki
+      - Europe/Kaliningrad
+      - Europe/London
+      - Europe/Madrid
+      - Europe/Moscow
+      - Europe/Paris
+      - Europe/Prague
+      - Europe/Rome
+      - Europe/Sarajevo
+      - Pacific/Apia
+      - Pacific/Auckland
+      - Pacific/Chatham
+      - Pacific/Fiji
+      - Pacific/Guam
+      - Pacific/Honolulu
+      - Pacific/Kiritimati
+      - Pacific/Marquesas
+      - Pacific/Samoa
+      - Pacific/Tongatapu
+      - Pacific/Wake
+      - US/Alaska
+      - US/Central
+      - US/East-Indiana
+      - US/Eastern
+      - US/Pacific
+
   pAppServerInstanceType:
     Description: Titian Mosaic app server EC2 instance type
     Type: String
@@ -128,7 +249,7 @@ Parameters:
     Type: String
     Default: license-included
   pDBAllocatedStorage:
-    Description: Database Total storage size in GB. Default is 50 GB.
+    Description: Database total storage size in GB. Default is 50 GB.
     Type: String
     Default: 50 
   pDBInstanceType:
@@ -147,27 +268,27 @@ Parameters:
       - db.m4.xlarge
       - db.m4.2xlarge
   pDBMultiAZ:
-    Description: Multi-AZ Amazon RDS Configuration. true/false - default is false.
+    Description: Multi-AZ Amazon RDS configuration. true/false - default is false.
     Type: String
     AllowedValues:
     - "true"
     - "false"
     Default: "false"
   pDBName:
-    Description: Titian Mosaic Database Name
+    Description: Titian Mosaic database name
     Type: String
     MaxLength: 8
     Default: mosaic
   pDBPassword:
-    Description: Titian Mosaic Database User/Owner Password
+    Description: Titian Mosaic database user/owner password
     Type: String
     NoEcho: true
   pDBUsername:
-    Description: Titian Mosaic Database User/Owner
+    Description: Titian Mosaic database user/owner
     Type: String
     Default: mosaicowner
   pDnsHostedZoneApexDomain:
-    Description: (Optional) Internal DNS Apex Domain
+    Description: (Optional) Internal DNS apex domain
     Type: String
     Default: ""
   pDnsHostedZoneID:
@@ -224,7 +345,7 @@ Parameters:
     Description: CIDR block for the VPC
     Type: String
   pWebAccessCIDR:
-    Description:  Will only be used if Web Access Security Group is not specified. Enter 0.0.0.0/0 if you want to open it to the world.
+    Description:  Will only be used if web access security Group is not specified. Enter 0.0.0.0/0 if you want to open it to the world.
     Type: String
     Default: "10.0.0.0/16"
   QSS3BucketName:
@@ -283,6 +404,7 @@ Resources:
         pDBMultiAZ: !Ref pDBMultiAZ
         pDBName: !Ref pDBName
         pDBPassword: !Ref pDBPassword
+        pDBTimezone: !Ref pDBTimezone
         pDBSubnetA: !GetAtt rVPCStack.Outputs.PrivateSubnet1AID
         pDBSubnetB: !GetAtt rVPCStack.Outputs.PrivateSubnet2AID
         pDBUsername: !Ref pDBUsername

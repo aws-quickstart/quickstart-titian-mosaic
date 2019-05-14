@@ -50,5 +50,14 @@
     {
         "ParameterKey": "pDBEngineLicenseModel",
         "ParameterValue": "bring-your-own-license"
-    } 
+    },
+    {
+        "ParameterKey": "pWebAccessCIDR",
+        "ParameterValue": "0.0.0.0/0"
+    },
+    {
+        "ParameterKey": "pDBTimezone",
+        "ParameterValue": "US/Central"
+    }  
+    
 ]
