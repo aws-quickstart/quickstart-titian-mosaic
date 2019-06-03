@@ -42,57 +42,57 @@ Metadata:
       - pDBMultiAZ
     ParameterLabels:
       pAppServerInstanceType:
-        default: App Server Instance Type
+        default: App server instance type
       pAppSubnetA:
-        default: Application Subnet A
+        default: Application subnet A
       pAppSubnetB:
-        default: Application Subnet B
+        default: Application subnet B
       pDBAllocatedStorage:
-        default: Database Storage Capacity
+        default: Database storage capacity
       pDBEngine:
-        default: Database Engine
+        default: Database engine
       pDBEngineLicenseModel:
-        default: Database License Model
+        default: Database license model
       pDBInstanceType:
-        default: Database Instance Type
+        default: Database instance type
       pDBMultiAZ:
         default: Multi-AZ Amazon RDS
       pDBTimezone:
-        default: Database Time Zone
+        default: Database time zone
       pDBName:
-        default: Database Name
+        default: Database name
       pDBPassword:
-        default: Database Password
+        default: Database password
       pDBSubnetA:
-        default: Database Subnet A
+        default: Database subnet A
       pDBSubnetB:
-        default: Database Subnet B
+        default: Database subnet B
       pDBUsername:
-        default: Database User/Owner
+        default: Database user/owner
       pDmzSubnetA:
-        default: DMZ Subnet A
+        default: DMZ subnet A
       pDmzSubnetB:
-        default: DMZ Subnet B
+        default: DMZ subnet B
       pDnsHostedZoneApexDomain:
-        default: Internal DNS Apex Domain
+        default: Internal DNS apex domain
       pDnsHostedZoneID:
         default: Internal DNS hosted zone ID
       pDNSName: 
-        default: Mosaic Server DNS Name
+        default: Mosaic server DNS name
       pEC2KeyPair:
-        default: Key Pair for Mosaic Server
+        default: Key pair for Mosaic server
       pLoadBalancerType:
-        default: Load Balancer Type
+        default: Load balancer type
       pSecurityGroupForWebAccess:
-        default: Web Access Security Group
+        default: Web access security group
       pVpcId:
-        default: VPC for Deployment
+        default: VPC for deployment
       pWebAccessCIDR:
-        default: Web Access CIDR (No SG)
+        default: Web access CIDR 
        
 Parameters:
   pDBTimezone:
-    Description: What time zone should we set the database to? 
+    Description: The time zone to set the Mosaic FreezerManagement database to.
     Type: String
     AllowedValues: 
       - Africa/Cairo
@@ -209,11 +209,11 @@ Parameters:
       - US/Eastern
       - US/Pacific
   pDNSName:
-    Description: The internal DNS CNAME to be used for the Mosaic server. Leave the default if you are unsure of what this does.
+    Description: The internal DNS CNAME to be used for the Mosaic server. Leave this as the default if you are unsure.
     Type: String
     Default: mosaic
   pAppServerInstanceType:
-    Description: Titian Mosaic app server EC2 instance type
+    Description: The EC2 instance type for the Mosaic application server.
     Type: String
     Default: t2.large
     AllowedValues: 
@@ -227,33 +227,33 @@ Parameters:
       - m4.xlarge
       - m4.2xlarge
   pAppSubnetA:
-    Description: Production App Subnet A. Target subnet for the app server. 
+    Description: The ID of the first application subnet in your existing VPC for setting up the Mosaic application server.
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Subnet::Id>'
     Default: /BB/Networking/VPC/Research/Subnet/App/A
   pAppSubnetB:
-    Description: Production App Subnet B. Target subnet for the app server. 
+    Description: The ID of the second application subnet in your existing VPC for setting up the Mosaic application server.
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Subnet::Id>'
     Default: /BB/Networking/VPC/Research/Subnet/App/B
   pDBEngine:
-    Description: Amazon RDS Oracle Version. Recommend the default.
+    Description: The Oracle Database version of the Mosaic FreezerManagement database. We recommend that you keep the default setting.
     Type: String
     Default: oracle-se2
     AllowedValues:
       - oracle-se2
       - oracle-ee
   pDBEngineLicenseModel: 
-    Description: Oracle license model.
+    Description: The license model for the Oracle Database. The two options are license-included and bring your own license (BYOL).
     AllowedValues:
       - license-included
       - bring-your-own-license
     Type: String
     Default: license-included
   pDBAllocatedStorage:
-    Description: Database total storage size in GB. Default is 50 GB.
+    Description: The storage size of the Mosaic FreezerManagement database, in GiB.
     Type: String
     Default: 50 
   pDBInstanceType:
-    Description: Database instance class. Default is db.t2.large.
+    Description: The database instance class for the Mosaic FreezerManagement database.
     Type: String
     Default: db.t2.large
     AllowedValues: 
@@ -268,47 +268,47 @@ Parameters:
       - db.m4.xlarge
       - db.m4.2xlarge
   pDBMultiAZ:
-    Description: Multi-AZ Amazon RDS configuration. true/false - default is false.
+    Description: Set this parameter to true if you want to deploy the database in a Multi-AZ configuration. If true, Amazon RDS automatically creates a primary DB instance and synchronously replicates the datat to a standby DB instance in a different Availability Zone for high availability. For more information, see the Amazon RDS documentation.
     Type: String
     AllowedValues:
     - "true"
     - "false"
     Default: "false"
   pDBName:
-    Description: Titian Mosaic database name
+    Description: The name of the Mosaic FreezerManagement database. This string has a maximum length of 8 characters.
     Type: String
     MaxLength: 8
     Default: mosaic
   pDBPassword:
-    Description: Database user/owner password
+    Description: The password for the Mosaic FreezerManagement database owner.
     Type: String
     NoEcho: true
   pDBSubnetA:
-    Description: Subnet ID for production DB subnet A.
+    Description: The ID of the first database subnet in your existing VPC for setting up the Mosaic FreezerManagement database.
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Subnet::Id>'
     Default: /BB/Networking/VPC/Research/Subnet/DB/A
   pDBSubnetB:
-    Description: Subnet ID for production DB subnet B.
+    Description: The ID of the second database subnet in your existing VPC for setting up the Mosaic FreezerManagement database.
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Subnet::Id>'
     Default: /BB/Networking/VPC/Research/Subnet/DB/B
   pDBUsername:
-    Description: Database user/owner
+    Description: The user name of the Mosaic FreezerManagement database owner.
     Type: String
     Default: mosaicowner
   pDmzSubnetA:
-    Description: Production DMZ subnet A. Target subnet for the app server. 
+    Description: The ID of the first public subnet in your existing VPC to be used by the ALB (e.g., subnet-a0246dcd). 
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Subnet::Id>'
     Default: /BB/Networking/VPC/Research/Subnet/DMZ/A
   pDmzSubnetB:
-    Description: Production DMZ subnet B. Target subnet for the app server. 
+    Description: The ID of the second public subnet in your existing VPC to be used by the ALB (e.g., subnet-a0246dcd). 
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Subnet::Id>'
     Default: /BB/Networking/VPC/Research/Subnet/DMZ/B
   pDnsHostedZoneApexDomain:
-    Description: (Optional) Internal DNS apex domain
+    Description: (Optional) The domain name associated with your DNS hosted zone ID. Leave this parameter blank if you deployed the Biotech Blueprint – Core Quick Start.
     Type: 'AWS::SSM::Parameter::Value<String>'      
     Default: /BB/QuickStart/DNS/DnsHostedZoneApexDomain
   pDnsHostedZoneID:
-    Description: (Optional) Internal DNS hosted zone ID.
+    Description: (Optional) The internal DNS hosted zone ID. Leave the default value if you deployed the Biotech Blueprint – Core Quick Start, which creates a private hosted zone for you.
     Type: 'AWS::SSM::Parameter::Value<String>'
     Default: /BB/QuickStart/DNS/HostedZoneId
   pDNSName:
@@ -316,24 +316,25 @@ Parameters:
     Type: String
     Default: mosaic
   pEC2KeyPair:
-    Description: Key name for app server.
+    Description: A public/private key pair, which allows you to connect securely to the Mosaic application server.
     Type: AWS::EC2::KeyPair::KeyName  
   pLoadBalancerType:
+    Description: The type (internet-facing or internal) of the load balancer. If you keep the default setting, the load balancer will be internet addressable and you don’t need VPN. If you choose internal, you must connect to your VPN solution after deployment, so that your DHCP options use the VPC DNS server in the VPC that your hosted zone is attached to.
     Default: internet-facing
     Type: String
     AllowedValues: 
       - internet-facing
       - internal
   pSecurityGroupForWebAccess:
-    Description: Security group for web access
+    Description: The security group ID for web access.
     Type: 'AWS::SSM::Parameter::Value<String>'
     Default: /BB/Networking/VPC/Research/InformaticsAccessSG
   pVpcId:
-    Description: VPC ID
+    Description: The ID of your existing VPC (e.g., vpc-0343606e) to use for the Mosaic deployment.
     Type: 'AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>'
     Default: /BB/Networking/VPC/Research
   pWebAccessCIDR:
-    Description: Will only be used if web access security group is not specified. Enter 0.0.0.0/0 if you want to open it to the world.
+    Description: The CIDR IP range that’s allowed web access. This is used only if you don’t specify a security group for the previous parameter. 
     Type: String
     Default: "10.0.0.0/16"
 
