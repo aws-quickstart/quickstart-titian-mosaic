@@ -5,11 +5,11 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: Titian Configuration
+        default: Titian configuration
       Parameters:
       - pDNSName
     - Label:
-        default: Network Configuration
+        default: Network configuration
       Parameters:
       - pVpcId
       - pDmzSubnetA
@@ -29,7 +29,7 @@ Metadata:
       - pEC2KeyPair
       - pAppServerInstanceType
     - Label:
-        default: Amazon RDS Configuration
+        default: Amazon RDS configuration
       Parameters:
       - pDBName
       - pDBTimezone
@@ -70,9 +70,9 @@ Metadata:
       pDBUsername:
         default: Database user/owner
       pDmzSubnetA:
-        default: DMZ subnet A
+        default: Public subnet A
       pDmzSubnetB:
-        default: DMZ subnet B
+        default: Public subnet B
       pDnsHostedZoneApexDomain:
         default: Internal DNS apex domain
       pDnsHostedZoneID:
