@@ -1,6 +1,6 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Launches a Titian Mosaic application server and database. qs-1pjap3ssl
+Description: Launches a Titian Mosaic application server and database. (qs-1pjap3ssl)
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
