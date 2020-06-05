@@ -43,6 +43,7 @@ Metadata:
         default: AWS Quick Start Configuration
       Parameters:
       - QSS3BucketName
+      - QSS3BucketRegion
       - QSS3KeyPrefix
     ParameterLabels:
       pDBTimezone: 
@@ -95,6 +96,8 @@ Metadata:
         default: Quick Start S3 Key Prefix
       QSS3BucketName:
         default: Quick Start S3 Bucket Name
+      QSS3BucketRegion:
+        default: Quick Start S3 bucket region
 
 Parameters:
   pDBTimezone:
@@ -358,6 +361,10 @@ Parameters:
       can include numbers, lowercase letters, uppercase letters, and hyphens (-).
       It cannot start or end with a hyphen (-).
     Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
+    Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
     ConstraintDescription: Quick Start key prefix can include numbers, lowercase letters,
@@ -369,13 +376,17 @@ Parameters:
     Type: String
 Conditions:
   cDNSRecord: !Not [ !Or [ !Equals [!Ref pDnsHostedZoneID, ""] , !Equals [!Ref pDnsHostedZoneApexDomain, ""] ] ]
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 Resources:
   # Deploys a VPC in two availability zones with public and private subnets
   rVPCStack:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:
-        Fn::Sub: https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
         AvailabilityZones: !Join [ "," , !Ref pAvailabilityZones ]
         KeyPairName: !Ref pEC2KeyPair
@@ -392,7 +403,11 @@ Resources:
     DependsOn:
     - rVPCStack
     Properties:
-      TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/titian-mosaic.template
+      TemplateURL:
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/titian-mosaic.template'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
         pAppServerInstanceType: !Ref pAppServerInstanceType
         pAppSubnetA: !GetAtt rVPCStack.Outputs.PublicSubnet1ID
