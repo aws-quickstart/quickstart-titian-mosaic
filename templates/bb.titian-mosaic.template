@@ -584,7 +584,7 @@ Resources:
     DependsOn: rAutoScalingGroupApp
     Properties:
       Handle: !Ref rAppServerInitWaitHandle
-      Timeout: '2700'
+      Timeout: '1800'
 
   ###
   ### RDS Instance
