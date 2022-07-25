@@ -1,15 +1,15 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Launches a Titian Mosaic FreezerManagement application server and database with Biotech Blueprint parameter store defaults.
+Description: Launches a Titian Mosaic FreezerManagement application server and database. (qs-1pjap3ssl)
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: Titian configuration
+        default: Titian Configuration
       Parameters:
       - pDNSName
     - Label:
-        default: Network configuration
+        default: Network Configuration
       Parameters:
       - pVpcId
       - pDmzSubnetA
@@ -29,7 +29,7 @@ Metadata:
       - pEC2KeyPair
       - pAppServerInstanceType
     - Label:
-        default: Amazon RDS configuration
+        default: Amazon RDS Configuration
       Parameters:
       - pDBName
       - pDBTimezone
@@ -42,57 +42,57 @@ Metadata:
       - pDBMultiAZ
     ParameterLabels:
       pAppServerInstanceType:
-        default: App server instance type
+        default: App Server Instance Type
       pAppSubnetA:
-        default: Application subnet A
+        default: Application Subnet A
       pAppSubnetB:
-        default: Application subnet B
+        default: Application Subnet B
       pDBAllocatedStorage:
-        default: Database storage capacity
+        default: Database Storage Capacity
       pDBEngine:
-        default: Database engine
+        default: Database Engine
       pDBEngineLicenseModel:
-        default: Database license model
+        default: Database License Model
       pDBInstanceType:
-        default: Database instance type
+        default: Database Instance Type
       pDBMultiAZ:
         default: Multi-AZ Amazon RDS
       pDBTimezone:
-        default: Database time zone
+        default: Database Time Zone
       pDBName:
-        default: Database name
+        default: Database Name
       pDBPassword:
-        default: Database password
+        default: Database Password
       pDBSubnetA:
-        default: Database subnet A
+        default: Database Subnet A
       pDBSubnetB:
-        default: Database subnet B
+        default: Database Subnet B
       pDBUsername:
-        default: Database user/owner
+        default: Database User/Owner
       pDmzSubnetA:
-        default: Public subnet A
+        default: DMZ Subnet A
       pDmzSubnetB:
-        default: Public subnet B
+        default: DMZ Subnet B
       pDnsHostedZoneApexDomain:
-        default: Internal DNS apex domain
+        default: Internal DNS Apex Domain
       pDnsHostedZoneID:
         default: Internal DNS hosted zone ID
       pDNSName: 
-        default: Mosaic server DNS name
+        default: Mosaic Server DNS Name
       pEC2KeyPair:
-        default: Key pair for Mosaic server
+        default: Key Pair for Mosaic Server
       pLoadBalancerType:
-        default: Load balancer type
+        default: Load Balancer Type
       pSecurityGroupForWebAccess:
-        default: Web access security group
+        default: Web Access Security Group
       pVpcId:
-        default: VPC for deployment
+        default: VPC for Deployment
       pWebAccessCIDR:
-        default: Web access CIDR 
+        default: Web Access CIDR (No SG)
        
 Parameters:
   pDBTimezone:
-    Description: The time zone to set the Titian Mosaic FreezerManagement database to.
+    Description: What time zone should we set the database to? 
     Type: String
     AllowedValues: 
       - Africa/Cairo
@@ -209,11 +209,11 @@ Parameters:
       - US/Eastern
       - US/Pacific
   pDNSName:
-    Description: The internal DNS CNAME to be used for the Titian Mosaic FreezerManagement server. Leave this as the default if you are unsure.
+    Description: The internal DNS CNAME to be used for the Titian Mosaic FreezerManagement server. Leave the default if you are unsure of what this does.
     Type: String
     Default: mosaic
   pAppServerInstanceType:
-    Description: The EC2 instance type for the Titian Mosaic FreezerManagement application server.
+    Description: Titian Mosaic FreezerManagement app server EC2 instance type
     Type: String
     Default: t2.large
     AllowedValues: 
@@ -227,33 +227,31 @@ Parameters:
       - m4.xlarge
       - m4.2xlarge
   pAppSubnetA:
-    Description: The ID of the first application subnet in your existing VPC for setting up the Titian Mosaic FreezerManagement application server.
-    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Subnet::Id>'
-    Default: /BB/Networking/VPC/Research/Subnet/App/A
+    Description: Production App Subnet A. Target subnet for the app server. 
+    Type: AWS::EC2::Subnet::Id
   pAppSubnetB:
-    Description: The ID of the second application subnet in your existing VPC for setting up the Titian Mosaic FreezerManagement application server.
-    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Subnet::Id>'
-    Default: /BB/Networking/VPC/Research/Subnet/App/B
+    Description: Production App Subnet B. Target subnet for the app server. 
+    Type: AWS::EC2::Subnet::Id
   pDBEngine:
-    Description: The Oracle Database version of the Titian Mosaic FreezerManagement database. We recommend that you keep the default setting.
+    Description: Amazon RDS Oracle Version. Recommend the default.
     Type: String
     Default: oracle-se2
     AllowedValues:
       - oracle-se2
       - oracle-ee
   pDBEngineLicenseModel: 
-    Description: The license model for the Oracle Database. The two options are license-included and bring your own license (BYOL).
+    Description: Oracle license model.
     AllowedValues:
       - license-included
       - bring-your-own-license
     Type: String
     Default: license-included
   pDBAllocatedStorage:
-    Description: The storage size of the Titian Mosaic FreezerManagement database, in GiB.
+    Description: Database total storage size in GB. Default is 50 GB.
     Type: String
     Default: 50 
   pDBInstanceType:
-    Description: The database instance class for the Titian Mosaic FreezerManagement database.
+    Description: Database instance class. Default is db.t2.large.
     Type: String
     Default: db.t3.large
     AllowedValues: 
@@ -268,84 +266,78 @@ Parameters:
       - db.m4.xlarge
       - db.m4.2xlarge
   pDBMultiAZ:
-    Description: Set this parameter to true if you want to deploy the database in a Multi-AZ configuration. If true, Amazon RDS automatically creates a primary DB instance and synchronously replicates the datat to a standby DB instance in a different Availability Zone for high availability. For more information, see the Amazon RDS documentation.
+    Description: Multi-AZ Amazon RDS configuration. true/false - default is false.
     Type: String
     AllowedValues:
     - "true"
     - "false"
     Default: "false"
   pDBName:
-    Description: The name of the Titian Mosaic FreezerManagement database. This string has a maximum length of 8 characters.
+    Description: Titian Mosaic FreezerManagement database name
     Type: String
     MaxLength: 8
     Default: mosaic
   pDBPassword:
-    Description: The password for the Titian Mosaic FreezerManagement database owner.
+    Description: Database user/owner password
     Type: String
     NoEcho: true
   pDBSubnetA:
-    Description: The ID of the first database subnet in your existing VPC for setting up the Titian Mosaic FreezerManagement database.
-    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Subnet::Id>'
-    Default: /BB/Networking/VPC/Research/Subnet/DB/A
+    Description: Subnet ID for production DB subnet A.
+    Type: AWS::EC2::Subnet::Id
   pDBSubnetB:
-    Description: The ID of the second database subnet in your existing VPC for setting up the Titian Mosaic FreezerManagement database.
-    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Subnet::Id>'
-    Default: /BB/Networking/VPC/Research/Subnet/DB/B
+    Description: Subnet ID for production DB subnet B.
+    Type: AWS::EC2::Subnet::Id
   pDBUsername:
-    Description: The user name of the Titian Mosaic FreezerManagement database owner.
+    Description: Database user/owner
     Type: String
     Default: mosaicowner
   pDmzSubnetA:
-    Description: The ID of the first public subnet in your existing VPC to be used by the ALB (e.g., subnet-a0246dcd). 
-    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Subnet::Id>'
-    Default: /BB/Networking/VPC/Research/Subnet/DMZ/A
+    Description: Production DMZ subnet A. Target subnet for the app server. 
+    Type: AWS::EC2::Subnet::Id
   pDmzSubnetB:
-    Description: The ID of the second public subnet in your existing VPC to be used by the ALB (e.g., subnet-a0246dcd). 
-    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Subnet::Id>'
-    Default: /BB/Networking/VPC/Research/Subnet/DMZ/B
+    Description: Production DMZ subnet B. Target subnet for the app server. 
+    Type: AWS::EC2::Subnet::Id
   pDnsHostedZoneApexDomain:
-    Description: (Optional) The domain name associated with your DNS hosted zone ID. Leave this parameter blank if you deployed the Biotech Blueprint – Core Quick Start.
-    Type: 'AWS::SSM::Parameter::Value<String>'      
-    Default: /BB/QuickStart/DNS/DnsHostedZoneApexDomain
+    Description: (Optional) Internal DNS apex domain
+    Type: String
+    Default: ""
   pDnsHostedZoneID:
-    Description: (Optional) The internal DNS hosted zone ID. Leave the default value if you deployed the Biotech Blueprint – Core Quick Start, which creates a private hosted zone for you.
-    Type: 'AWS::SSM::Parameter::Value<String>'
-    Default: /BB/QuickStart/DNS/HostedZoneId
+    Description: (Optional) Internal DNS hosted zone ID.
+    Type: String
+    Default: ""
   pDNSName:
     Description: The internal DNS CNAME to be used for the Titian Mosaic FreezerManagement server. Leave the default if you are unsure of what this does.
     Type: String
     Default: mosaic
   pEC2KeyPair:
-    Description: A public/private key pair, which allows you to connect securely to the Titian Mosaic FreezerManagement application server.
+    Description: Key name for app server.
     Type: AWS::EC2::KeyPair::KeyName  
   pLoadBalancerType:
-    Description: The type (internet-facing or internal) of the load balancer. If you keep the default setting, the load balancer will be internet addressable and you don’t need VPN. If you choose internal, you must connect to your VPN solution after deployment, so that your DHCP options use the VPC DNS server in the VPC that your hosted zone is attached to.
     Default: internet-facing
     Type: String
     AllowedValues: 
       - internet-facing
       - internal
   pSecurityGroupForWebAccess:
-    Description: The security group ID for web access.
-    Type: 'AWS::SSM::Parameter::Value<String>'
-    Default: /BB/Networking/VPC/Research/InformaticsAccessSG
+    Description: Security group for web access
+    Type: String
+    Default: ""
   pVpcId:
-    Description: The ID of your existing VPC (e.g., vpc-0343606e) to use for the Titian Mosaic FreezerManagement deployment.
-    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::VPC::Id>'
-    Default: /BB/Networking/VPC/Research
+    Description: VPC ID
+    Type: AWS::EC2::VPC::Id
   pWebAccessCIDR:
-    Description: The CIDR IP range that’s allowed web access. This is used only if you don’t specify a security group for the previous parameter. 
+    Description: Will only be used if web access security group is not specified. Enter 0.0.0.0/0 if you want to open it to the world.
     Type: String
     Default: "10.0.0.0/16"
 
 Mappings:
   AWSAMIRegionMap:
     us-east-1:
-      mAppServerAMI: ami-01cc6575cfee51cc5
+      mAppServerAMI: ami-07fa888610cf47a6b
     us-west-2:
-      mAppServerAMI: ami-0642637a7314f8650
+      mAppServerAMI: ami-0bbeb7dbe4ea1aa78
     eu-west-1:
-      mAppServerAMI: ami-0f6b1fd43e0664ab9
+      mAppServerAMI: ami-0f3a9179a68e2be01
 Conditions:
   cDNSRecord: !Not [ !Or [ !Equals [!Ref pDnsHostedZoneID, ""] , !Equals [!Ref pDnsHostedZoneApexDomain, ""] ] ]
   cWebAccessSG: !Not [ !Equals [ !Ref pSecurityGroupForWebAccess, "" ] ]
@@ -357,7 +349,7 @@ Resources:
     Condition: cDNSRecord
     Properties:
       HostedZoneId: !Ref pDnsHostedZoneID
-      Comment: Internal DNS CNAME for Titian Mosaic.
+      Comment: Internal DNS CNAME for Titian Mosaic FreezerManagement.
       Name: !Sub ${pDNSName}.${pDnsHostedZoneApexDomain}
       Type: CNAME 
       TTL: 60

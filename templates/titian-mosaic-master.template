@@ -1,6 +1,6 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Launches a Titian Mosaic application server and database. (qs-1pjap3spf)
+Description: Launches a Titian Mosaic FreezerManagement application server and database. (qs-1pjap3spf)
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -101,7 +101,7 @@ Metadata:
 
 Parameters:
   pDBTimezone:
-    Description: What time zone should we set the database to? 
+    Description: What time zone should we set the Titian Mosaic FreezerManagement database to? 
     Type: String
     AllowedValues: 
       - Africa/Cairo
@@ -219,7 +219,7 @@ Parameters:
       - US/Pacific
 
   pAppServerInstanceType:
-    Description: Titian Mosaic app server EC2 instance type
+    Description: Titian Mosaic FreezerManagement app server EC2 instance type
     Type: String
     Default: t2.large
     AllowedValues: 
@@ -258,12 +258,12 @@ Parameters:
   pDBInstanceType:
     Description: Database Size.
     Type: String
-    Default: db.t2.large
+    Default: db.t3.large
     AllowedValues: 
-      - db.t2.medium
-      - db.t2.large
-      - db.t2.xlarge
-      - db.t2.2xlarge
+      - db.t3.medium
+      - db.t3.large
+      - db.t3.xlarge
+      - db.t3.2xlarge
       - db.r4.large
       - db.r4.xlarge
       - db.r4.2xlarge
@@ -278,16 +278,16 @@ Parameters:
     - "false"
     Default: "false"
   pDBName:
-    Description: Titian Mosaic database name
+    Description: Titian Mosaic FreezerManagement database name
     Type: String
     MaxLength: 8
     Default: mosaic
   pDBPassword:
-    Description: Titian Mosaic database user/owner password
+    Description: Titian Mosaic FreezerManagement database user/owner password
     Type: String
     NoEcho: true
   pDBUsername:
-    Description: Titian Mosaic database user/owner
+    Description: Titian Mosaic FreezerManagement database user/owner
     Type: String
     Default: mosaicowner
   pDnsHostedZoneApexDomain:
@@ -299,7 +299,7 @@ Parameters:
     Type: String
     Default: ""
   pDNSName:
-    Description: The internal DNS CNAME to be used for the Mosaic server. Leave the default if you are unsure of what this does.
+    Description: The internal DNS CNAME to be used for the Titian Mosaic FreezerManagement server. Leave the default if you are unsure of what this does.
     Type: String
     Default: mosaic
   pEC2KeyPair:
@@ -397,7 +397,7 @@ Resources:
         PublicSubnet2CIDR: !Ref pPublicSubnet2CIDR
         VPCCIDR: !Ref pVPCCIDR
 
-  # Deploys Titian Mosaic into the VPC that was just created
+  # Deploys Titian Mosaic FreezerManagement into the VPC that was just created
   rTitianMosaic:
     Type: AWS::CloudFormation::Stack
     DependsOn:
@@ -436,9 +436,9 @@ Resources:
 
 Outputs:
   oLoadBalancerDNS:
-    Description: DNS of Load Balancer to access Titian Mosaic
+    Description: DNS of Load Balancer to access Titian Mosaic FreezerManagement
     Value: !GetAtt rTitianMosaic.Outputs.oLoadBalancerDNS
   oDNSUrl:
     Condition: cDNSRecord
-    Description: URL to Load Balancer to access ChemAxon Compound Registry
+    Description: URL to Load Balancer to access Titian Mosaic FreezerManagement
     Value: !GetAtt rTitianMosaic.Outputs.oInternalDNSUrl
