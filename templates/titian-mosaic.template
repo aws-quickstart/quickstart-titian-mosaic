@@ -251,7 +251,7 @@ Parameters:
     Type: String
     Default: 50 
   pDBInstanceType:
-    Description: Database instance class. Default is db.t2.large.
+    Description: Database instance class. Default is db.t3.large.
     Type: String
     Default: db.t3.large
     AllowedValues: 
