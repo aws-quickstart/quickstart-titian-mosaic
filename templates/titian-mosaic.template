@@ -92,7 +92,7 @@ Metadata:
        
 Parameters:
   pDBTimezone:
-    Description: What time zone should we set the database to? 
+    Description: The time zone to set the Mosaic FreezerManagement database to.
     Type: String
     AllowedValues: 
       - Africa/Cairo
