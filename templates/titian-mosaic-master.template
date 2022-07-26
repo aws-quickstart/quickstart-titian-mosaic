@@ -1,15 +1,15 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Launches a Titian Mosaic FreezerManagement application server and database. (qs-1pjap3spf)
+Description: Launches a Titian Mosaic application server and database. (qs-1pjap3spf)
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: Titian Configuration
+        default: Titian configuration
       Parameters:
       - pDNSName
     - Label:
-        default: Network Configuration
+        default: Network configuration
       Parameters:
       - pAvailabilityZones
       - pVPCCIDR
@@ -23,12 +23,12 @@ Metadata:
       - pSecurityGroupForWebAccess
       - pWebAccessCIDR
     - Label:
-        default: Amazon EC2 Configuration
+        default: Amazon EC2 configuration
       Parameters:
       - pEC2KeyPair
       - pAppServerInstanceType
     - Label:
-        default: Amazon RDS Configuration
+        default: Amazon RDS configuration
       Parameters:
         - pDBName
         - pDBUsername
@@ -40,68 +40,68 @@ Metadata:
         - pDBEngineLicenseModel
         - pDBMultiAZ
     - Label:
-        default: AWS Quick Start Configuration
+        default: AWS quick start configuration
       Parameters:
       - QSS3BucketName
       - QSS3BucketRegion
       - QSS3KeyPrefix
     ParameterLabels:
       pDBTimezone: 
-        default: DB Time Zone
+        default: DB time zone
       pAppServerInstanceType:
-        default: App Server Instance Type
+        default: App server instance type
       pAvailabilityZones:
-        default: Availability Zones
+        default: Availability zones
       pDBAllocatedStorage:
-        default: Database Storage Capacity
+        default: Database storage capacity
       pDBEngine:
-        default: Database Engine
+        default: Database engine
       pDBEngineLicenseModel:
-        default: Database License Model
+        default: Database license model
       pDBInstanceType:
-        default: Database Instance Type
+        default: Database instance type
       pDBMultiAZ:
-        default: Multi-AZ Amazon RDS
+        default: Multi-AZ amazon RDS
       pDBName:
-        default: Database Name
+        default: Database name
       pDBPassword:
-        default: Database Password
+        default: Database password
       pDBUsername:
-        default: Database User/Owner
+        default: Database user/owner
       pDnsHostedZoneApexDomain:
-        default: Internal DNS Apex Domain
+        default: Internal DNS apex domain
       pDnsHostedZoneID:
         default: Internal DNS hosted zone ID
       pDNSName: 
-        default: Mosaic Server DNS Name
+        default: Mosaic server DNS name
       pEC2KeyPair:
-        default: Key Pair for Server
+        default: Key pair for server
       pLoadBalancerType:
-        default: Load Balancer Type
+        default: Load balancer type
       pPrivateSubnet1CIDR:
-        default: Private Subnet 1 CIDR
+        default: Private subnet 1 CIDR
       pPrivateSubnet2CIDR:
-        default: Private Subnet 2 CIDR
+        default: Private subnet 2 CIDR
       pPublicSubnet1CIDR:
-        default: Public Subnet 1 CIDR
+        default: Public subnet 1 CIDR
       pPublicSubnet2CIDR:
-        default: Public Subnet 2 CIDR
+        default: Public subnet 2 CIDR
       pSecurityGroupForWebAccess:
-        default: Web Access Security Group
+        default: Web access security group
       pVPCCIDR:
         default: VPC CIDR  
       pWebAccessCIDR:
-        default: Web Access CIDR (No SG)
+        default: Web access CIDR (no SG)
       QSS3KeyPrefix:
-        default: Quick Start S3 Key Prefix
+        default: Quick start S3 key prefix
       QSS3BucketName:
-        default: Quick Start S3 Bucket Name
+        default: Quick start S3 bucket name
       QSS3BucketRegion:
-        default: Quick Start S3 bucket region
+        default: Quick start S3 bucket region
 
 Parameters:
   pDBTimezone:
-    Description: What time zone should we set the Titian Mosaic FreezerManagement database to? 
+    Description: What time zone should we set the database to? 
     Type: String
     AllowedValues: 
       - Africa/Cairo
@@ -219,7 +219,7 @@ Parameters:
       - US/Pacific
 
   pAppServerInstanceType:
-    Description: Titian Mosaic FreezerManagement app server EC2 instance type
+    Description: Titian Mosaic app server EC2 instance type
     Type: String
     Default: t2.large
     AllowedValues: 
@@ -278,16 +278,16 @@ Parameters:
     - "false"
     Default: "false"
   pDBName:
-    Description: Titian Mosaic FreezerManagement database name
+    Description: Titian Mosaic database name
     Type: String
     MaxLength: 8
     Default: mosaic
   pDBPassword:
-    Description: Titian Mosaic FreezerManagement database user/owner password
+    Description: Titian Mosaic database user/owner password
     Type: String
     NoEcho: true
   pDBUsername:
-    Description: Titian Mosaic FreezerManagement database user/owner
+    Description: Titian Mosaic database user/owner
     Type: String
     Default: mosaicowner
   pDnsHostedZoneApexDomain:
@@ -299,7 +299,7 @@ Parameters:
     Type: String
     Default: ""
   pDNSName:
-    Description: The internal DNS CNAME to be used for the Titian Mosaic FreezerManagement server. Leave the default if you are unsure of what this does.
+    Description: The internal DNS CNAME to be used for the Mosaic server. Leave the default if you are unsure of what this does.
     Type: String
     Default: mosaic
   pEC2KeyPair:
@@ -397,7 +397,7 @@ Resources:
         PublicSubnet2CIDR: !Ref pPublicSubnet2CIDR
         VPCCIDR: !Ref pVPCCIDR
 
-  # Deploys Titian Mosaic FreezerManagement into the VPC that was just created
+  # Deploys Titian Mosaic into the VPC that was just created
   rTitianMosaic:
     Type: AWS::CloudFormation::Stack
     DependsOn:
@@ -436,9 +436,9 @@ Resources:
 
 Outputs:
   oLoadBalancerDNS:
-    Description: DNS of Load Balancer to access Titian Mosaic FreezerManagement
+    Description: DNS of Load Balancer to access Titian Mosaic
     Value: !GetAtt rTitianMosaic.Outputs.oLoadBalancerDNS
   oDNSUrl:
     Condition: cDNSRecord
-    Description: URL to Load Balancer to access Titian Mosaic FreezerManagement
+    Description: URL to Load Balancer to access Titian Mosaic
     Value: !GetAtt rTitianMosaic.Outputs.oInternalDNSUrl
