@@ -208,10 +208,6 @@ Parameters:
       - US/East-Indiana
       - US/Eastern
       - US/Pacific
-  pDNSName:
-    Description: The internal DNS CNAME to be used for the Mosaic server. Leave this as the default if you are unsure.
-    Type: String
-    Default: mosaic
   pAppServerInstanceType:
     Description: The EC2 instance type for the Mosaic application server.
     Type: String

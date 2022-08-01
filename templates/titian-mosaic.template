@@ -209,7 +209,7 @@ Parameters:
       - US/Eastern
       - US/Pacific
   pAppServerInstanceType:
-    Description: Titian Mosaic app server EC2 instance type
+    Description: Titian Mosaic app server EC2 instance type.
     Type: String
     Default: t2.large
     AllowedValues: 
