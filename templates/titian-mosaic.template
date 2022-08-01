@@ -208,10 +208,6 @@ Parameters:
       - US/East-Indiana
       - US/Eastern
       - US/Pacific
-  pDNSName:
-    Description: The internal DNS CNAME to be used for the Mosaic server. Leave the default if you are unsure of what this does.
-    Type: String
-    Default: mosaic
   pAppServerInstanceType:
     Description: Titian Mosaic app server EC2 instance type
     Type: String
