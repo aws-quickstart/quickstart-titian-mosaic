@@ -5,11 +5,11 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: Titian Configuration
+        default: Titian configuration
       Parameters:
       - pDNSName
     - Label:
-        default: Network Configuration
+        default: Network configuration
       Parameters:
       - pVpcId
       - pDmzSubnetA
@@ -24,12 +24,12 @@ Metadata:
       - pSecurityGroupForWebAccess
       - pWebAccessCIDR
     - Label:
-        default: Amazon EC2 Configuration
+        default: Amazon EC2 configuration
       Parameters:
       - pEC2KeyPair
       - pAppServerInstanceType
     - Label:
-        default: Amazon RDS Configuration
+        default: Amazon RDS configuration
       Parameters:
       - pDBName
       - pDBTimezone
@@ -42,57 +42,57 @@ Metadata:
       - pDBMultiAZ
     ParameterLabels:
       pAppServerInstanceType:
-        default: App Server Instance Type
+        default: App server instance type
       pAppSubnetA:
-        default: Application Subnet A
+        default: Application subnet A
       pAppSubnetB:
-        default: Application Subnet B
+        default: Application subnet B
       pDBAllocatedStorage:
-        default: Database Storage Capacity
+        default: Database storage capacity
       pDBEngine:
-        default: Database Engine
+        default: Database engine
       pDBEngineLicenseModel:
-        default: Database License Model
+        default: Database license model
       pDBInstanceType:
-        default: Database Instance Type
+        default: Database instance type
       pDBMultiAZ:
         default: Multi-AZ Amazon RDS
       pDBTimezone:
-        default: Database Time Zone
+        default: Database time zone
       pDBName:
-        default: Database Name
+        default: Database name
       pDBPassword:
-        default: Database Password
+        default: Database password
       pDBSubnetA:
-        default: Database Subnet A
+        default: Database subnet A
       pDBSubnetB:
-        default: Database Subnet B
+        default: Database subnet B
       pDBUsername:
-        default: Database User/Owner
+        default: Database user/owner
       pDmzSubnetA:
-        default: DMZ Subnet A
+        default: DMZ subnet A
       pDmzSubnetB:
-        default: DMZ Subnet B
+        default: DMZ subnet B
       pDnsHostedZoneApexDomain:
-        default: Internal DNS Apex Domain
+        default: Internal DNS apex domain
       pDnsHostedZoneID:
         default: Internal DNS hosted zone ID
       pDNSName: 
-        default: Mosaic Server DNS Name
+        default: Mosaic server DNS name
       pEC2KeyPair:
-        default: Key Pair for Mosaic Server
+        default: Key pair for mosaic server
       pLoadBalancerType:
         default: Load Balancer Type
       pSecurityGroupForWebAccess:
-        default: Web Access Security Group
+        default: Web access security group
       pVpcId:
-        default: VPC for Deployment
+        default: VPC for deployment
       pWebAccessCIDR:
-        default: Web Access CIDR (No SG)
+        default: Web access CIDR (no SG)
        
 Parameters:
   pDBTimezone:
-    Description: What time zone should we set the database to? 
+    Description: The time zone to set the Mosaic FreezerManagement database to.
     Type: String
     AllowedValues: 
       - Africa/Cairo
@@ -208,12 +208,8 @@ Parameters:
       - US/East-Indiana
       - US/Eastern
       - US/Pacific
-  pDNSName:
-    Description: The internal DNS CNAME to be used for the Mosaic server. Leave the default if you are unsure of what this does.
-    Type: String
-    Default: mosaic
   pAppServerInstanceType:
-    Description: Titian Mosaic app server EC2 instance type
+    Description: Titian Mosaic app server EC2 instance type.
     Type: String
     Default: t2.large
     AllowedValues: 
@@ -251,14 +247,14 @@ Parameters:
     Type: String
     Default: 50 
   pDBInstanceType:
-    Description: Database instance class. Default is db.t2.large.
+    Description: Database instance class. Default is db.t3.large.
     Type: String
-    Default: db.t2.large
+    Default: db.t3.large
     AllowedValues: 
-      - db.t2.medium
-      - db.t2.large
-      - db.t2.xlarge
-      - db.t2.2xlarge
+      - db.t3.medium
+      - db.t3.large
+      - db.t3.xlarge
+      - db.t3.2xlarge
       - db.r4.large
       - db.r4.xlarge
       - db.r4.2xlarge
@@ -333,11 +329,11 @@ Parameters:
 Mappings:
   AWSAMIRegionMap:
     us-east-1:
-      mAppServerAMI: ami-0a895fbd380aba5b2
+      mAppServerAMI: ami-07fa888610cf47a6b
     us-west-2:
-      mAppServerAMI: ami-0740d3c6c39726e4a
+      mAppServerAMI: ami-0bbeb7dbe4ea1aa78
     eu-west-1:
-      mAppServerAMI: ami-014ea06ccd1f4966b
+      mAppServerAMI: ami-0f3a9179a68e2be01
 Conditions:
   cDNSRecord: !Not [ !Or [ !Equals [!Ref pDnsHostedZoneID, ""] , !Equals [!Ref pDnsHostedZoneApexDomain, ""] ] ]
   cWebAccessSG: !Not [ !Equals [ !Ref pSecurityGroupForWebAccess, "" ] ]
@@ -587,7 +583,7 @@ Resources:
     Properties: 
       OptionGroupDescription : "Timezone option config for Titian database."
       EngineName: !Ref pDBEngine
-      MajorEngineVersion: "12.1"
+      MajorEngineVersion: "19"
       OptionConfigurations: 
         - 
           OptionName: Timezone
@@ -634,5 +630,5 @@ Outputs:
     Value: !GetAtt rApplicationLoadBalancer.DNSName
   oInternalDNSUrl:
     Condition: cDNSRecord
-    Description: URL to Load Balancer to access ChemAxon Compound Registry
+    Description: URL to Load Balancer to access Titian Mosaic
     Value: !Sub http://mosaic.${pDnsHostedZoneApexDomain}

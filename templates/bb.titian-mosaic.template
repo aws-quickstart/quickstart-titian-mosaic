@@ -24,7 +24,7 @@ Metadata:
       - pSecurityGroupForWebAccess
       - pWebAccessCIDR
     - Label:
-        default: Amazon EC2 Configuration
+        default: Amazon EC2 configuration
       Parameters:
       - pEC2KeyPair
       - pAppServerInstanceType
@@ -80,7 +80,7 @@ Metadata:
       pDNSName: 
         default: Mosaic server DNS name
       pEC2KeyPair:
-        default: Key pair for Mosaic server
+        default: Key pair for mosaic server
       pLoadBalancerType:
         default: Load balancer type
       pSecurityGroupForWebAccess:
@@ -208,10 +208,6 @@ Parameters:
       - US/East-Indiana
       - US/Eastern
       - US/Pacific
-  pDNSName:
-    Description: The internal DNS CNAME to be used for the Mosaic server. Leave this as the default if you are unsure.
-    Type: String
-    Default: mosaic
   pAppServerInstanceType:
     Description: The EC2 instance type for the Mosaic application server.
     Type: String
@@ -255,12 +251,12 @@ Parameters:
   pDBInstanceType:
     Description: The database instance class for the Mosaic FreezerManagement database.
     Type: String
-    Default: db.t2.large
+    Default: db.t3.large
     AllowedValues: 
-      - db.t2.medium
-      - db.t2.large
-      - db.t2.xlarge
-      - db.t2.2xlarge
+      - db.t3.medium
+      - db.t3.large
+      - db.t3.xlarge
+      - db.t3.2xlarge
       - db.r4.large
       - db.r4.xlarge
       - db.r4.2xlarge
@@ -341,11 +337,11 @@ Parameters:
 Mappings:
   AWSAMIRegionMap:
     us-east-1:
-      mAppServerAMI: ami-0a895fbd380aba5b2
+      mAppServerAMI: ami-07fa888610cf47a6b
     us-west-2:
-      mAppServerAMI: ami-0740d3c6c39726e4a
+      mAppServerAMI: ami-0bbeb7dbe4ea1aa78
     eu-west-1:
-      mAppServerAMI: ami-014ea06ccd1f4966b
+      mAppServerAMI: ami-0f3a9179a68e2be01
 Conditions:
   cDNSRecord: !Not [ !Or [ !Equals [!Ref pDnsHostedZoneID, ""] , !Equals [!Ref pDnsHostedZoneApexDomain, ""] ] ]
   cWebAccessSG: !Not [ !Equals [ !Ref pSecurityGroupForWebAccess, "" ] ]
@@ -595,7 +591,7 @@ Resources:
     Properties: 
       OptionGroupDescription : "Timezone option config for Titian database."
       EngineName: !Ref pDBEngine
-      MajorEngineVersion: "12.1"
+      MajorEngineVersion: "19"
       OptionConfigurations: 
         - 
           OptionName: Timezone
@@ -642,5 +638,5 @@ Outputs:
     Value: !GetAtt rApplicationLoadBalancer.DNSName
   oInternalDNSUrl:
     Condition: cDNSRecord
-    Description: URL to Load Balancer to access ChemAxon Compound Registry
+    Description: URL to Load Balancer to access Titian Mosaic
     Value: !Sub http://mosaic.${pDnsHostedZoneApexDomain}

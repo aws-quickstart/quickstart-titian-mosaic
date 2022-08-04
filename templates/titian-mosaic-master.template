@@ -5,11 +5,11 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
     - Label:
-        default: Titian Configuration
+        default: Titian configuration
       Parameters:
       - pDNSName
     - Label:
-        default: Network Configuration
+        default: Network configuration
       Parameters:
       - pAvailabilityZones
       - pVPCCIDR
@@ -23,12 +23,12 @@ Metadata:
       - pSecurityGroupForWebAccess
       - pWebAccessCIDR
     - Label:
-        default: Amazon EC2 Configuration
+        default: Amazon EC2 configuration
       Parameters:
       - pEC2KeyPair
       - pAppServerInstanceType
     - Label:
-        default: Amazon RDS Configuration
+        default: Amazon RDS configuration
       Parameters:
         - pDBName
         - pDBUsername
@@ -40,68 +40,68 @@ Metadata:
         - pDBEngineLicenseModel
         - pDBMultiAZ
     - Label:
-        default: AWS Quick Start Configuration
+        default: AWS quick start configuration
       Parameters:
       - QSS3BucketName
       - QSS3BucketRegion
       - QSS3KeyPrefix
     ParameterLabels:
       pDBTimezone: 
-        default: DB Time Zone
+        default: DB time zone
       pAppServerInstanceType:
-        default: App Server Instance Type
+        default: App server instance type
       pAvailabilityZones:
-        default: Availability Zones
+        default: Availability zones
       pDBAllocatedStorage:
-        default: Database Storage Capacity
+        default: Database storage capacity
       pDBEngine:
-        default: Database Engine
+        default: Database engine
       pDBEngineLicenseModel:
-        default: Database License Model
+        default: Database license model
       pDBInstanceType:
-        default: Database Instance Type
+        default: Database instance type
       pDBMultiAZ:
-        default: Multi-AZ Amazon RDS
+        default: Multi-AZ amazon RDS
       pDBName:
-        default: Database Name
+        default: Database name
       pDBPassword:
-        default: Database Password
+        default: Database password
       pDBUsername:
-        default: Database User/Owner
+        default: Database user/owner
       pDnsHostedZoneApexDomain:
-        default: Internal DNS Apex Domain
+        default: Internal DNS apex domain
       pDnsHostedZoneID:
         default: Internal DNS hosted zone ID
       pDNSName: 
-        default: Mosaic Server DNS Name
+        default: Mosaic server DNS name
       pEC2KeyPair:
-        default: Key Pair for Server
+        default: Key pair for server
       pLoadBalancerType:
-        default: Load Balancer Type
+        default: Load balancer type
       pPrivateSubnet1CIDR:
-        default: Private Subnet 1 CIDR
+        default: Private subnet 1 CIDR
       pPrivateSubnet2CIDR:
-        default: Private Subnet 2 CIDR
+        default: Private subnet 2 CIDR
       pPublicSubnet1CIDR:
-        default: Public Subnet 1 CIDR
+        default: Public subnet 1 CIDR
       pPublicSubnet2CIDR:
-        default: Public Subnet 2 CIDR
+        default: Public subnet 2 CIDR
       pSecurityGroupForWebAccess:
-        default: Web Access Security Group
+        default: Web access security group
       pVPCCIDR:
         default: VPC CIDR  
       pWebAccessCIDR:
-        default: Web Access CIDR (No SG)
+        default: Web access CIDR (no SG)
       QSS3KeyPrefix:
-        default: Quick Start S3 Key Prefix
+        default: Quick start S3 key prefix
       QSS3BucketName:
-        default: Quick Start S3 Bucket Name
+        default: Quick start S3 bucket name
       QSS3BucketRegion:
-        default: Quick Start S3 bucket region
+        default: Quick start S3 bucket region
 
 Parameters:
   pDBTimezone:
-    Description: What time zone should we set the database to? 
+    Description: The time zone to set the Mosaic FreezerManagement database to.
     Type: String
     AllowedValues: 
       - Africa/Cairo
@@ -258,12 +258,12 @@ Parameters:
   pDBInstanceType:
     Description: Database Size.
     Type: String
-    Default: db.t2.large
+    Default: db.t3.large
     AllowedValues: 
-      - db.t2.medium
-      - db.t2.large
-      - db.t2.xlarge
-      - db.t2.2xlarge
+      - db.t3.medium
+      - db.t3.large
+      - db.t3.xlarge
+      - db.t3.2xlarge
       - db.r4.large
       - db.r4.xlarge
       - db.r4.2xlarge
@@ -440,5 +440,5 @@ Outputs:
     Value: !GetAtt rTitianMosaic.Outputs.oLoadBalancerDNS
   oDNSUrl:
     Condition: cDNSRecord
-    Description: URL to Load Balancer to access ChemAxon Compound Registry
+    Description: URL to Load Balancer to access Titian Mosaic
     Value: !GetAtt rTitianMosaic.Outputs.oInternalDNSUrl
