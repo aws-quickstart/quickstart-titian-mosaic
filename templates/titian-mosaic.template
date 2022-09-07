@@ -602,7 +602,7 @@ Resources:
       MultiAZ: !Ref pDBMultiAZ
       AllocatedStorage: !Ref pDBAllocatedStorage
       DBInstanceIdentifier: "titian-mosaic-db"
-	  PubliclyAccessible: false
+      PubliclyAccessible: false
       OptionGroupName: !Ref rDBOptionGroup
       DBName: !Ref pDBName
       DBInstanceClass: !Ref pDBInstanceType
