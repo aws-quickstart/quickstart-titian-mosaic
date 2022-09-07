@@ -1,6 +1,6 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Launches a Titian Mosaic application server and database with Biotech Blueprint parameter store defaults.
+Description: Launches a Titian Mosaic application server and database with Biotech Blueprint parameter store defaults. (qs-1pjap3ssl)
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -610,6 +610,7 @@ Resources:
       MultiAZ: !Ref pDBMultiAZ
       AllocatedStorage: !Ref pDBAllocatedStorage
       DBInstanceIdentifier: "titian-mosaic-db"
+	  PubliclyAccessible: false
       OptionGroupName: !Ref rDBOptionGroup
       DBName: !Ref pDBName
       DBInstanceClass: !Ref pDBInstanceType
