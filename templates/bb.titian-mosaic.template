@@ -1,6 +1,6 @@
 ---
 AWSTemplateFormatVersion: 2010-09-09
-Description: Launches a Titian Mosaic application server and database with Biotech Blueprint parameter store defaults.
+Description: Launches a Titian Mosaic application server and database with Biotech Blueprint parameter store defaults. (qs-1pjap3ssl)
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -337,11 +337,11 @@ Parameters:
 Mappings:
   AWSAMIRegionMap:
     us-east-1:
-      mAppServerAMI: ami-07fa888610cf47a6b
+      mAppServerAMI: ami-07d9c0bd2ce884888
     us-west-2:
-      mAppServerAMI: ami-0bbeb7dbe4ea1aa78
+      mAppServerAMI: ami-0fbb63566e0337a93
     eu-west-1:
-      mAppServerAMI: ami-0f3a9179a68e2be01
+      mAppServerAMI: ami-0d99d947526c998f7
 Conditions:
   cDNSRecord: !Not [ !Or [ !Equals [!Ref pDnsHostedZoneID, ""] , !Equals [!Ref pDnsHostedZoneApexDomain, ""] ] ]
   cWebAccessSG: !Not [ !Equals [ !Ref pSecurityGroupForWebAccess, "" ] ]
@@ -610,6 +610,7 @@ Resources:
       MultiAZ: !Ref pDBMultiAZ
       AllocatedStorage: !Ref pDBAllocatedStorage
       DBInstanceIdentifier: "titian-mosaic-db"
+      PubliclyAccessible: false
       OptionGroupName: !Ref rDBOptionGroup
       DBName: !Ref pDBName
       DBInstanceClass: !Ref pDBInstanceType
