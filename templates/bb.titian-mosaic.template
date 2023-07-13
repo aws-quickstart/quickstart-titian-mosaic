@@ -337,11 +337,11 @@ Parameters:
 Mappings:
   AWSAMIRegionMap:
     us-east-1:
-      mAppServerAMI: ami-0359f842ee5349d55
+      mAppServerAMI: ami-088e29d23f27e5e57
     us-west-2:
-      mAppServerAMI: ami-0669355b1258963d1
+      mAppServerAMI: ami-06db54a39fd33a064
     eu-west-1:
-      mAppServerAMI: ami-04d2535efb54356e9
+      mAppServerAMI: ami-073ff6882a6fc3ef7
 Conditions:
   cDNSRecord: !Not [ !Or [ !Equals [!Ref pDnsHostedZoneID, ""] , !Equals [!Ref pDnsHostedZoneApexDomain, ""] ] ]
   cWebAccessSG: !Not [ !Equals [ !Ref pSecurityGroupForWebAccess, "" ] ]
