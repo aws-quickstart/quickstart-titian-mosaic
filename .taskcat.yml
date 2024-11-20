@@ -1,0 +1,32 @@
+project:
+  owner: quickstart-eng@amazon.com
+  name: quickstart-titian-mosaic
+  regions:
+    - eu-west-1
+    - us-east-1
+    - us-west-2
+  shorten_stack_name: true
+  s3_regional_buckets: true
+  package_lambda: false
+  template: ./templates/titian-mosaic-master.template
+tests:
+  test1:
+    regions:
+      - eu-west-1
+    parameters:
+      pAvailabilityZones: $[taskcat_genaz_2]
+      pEC2KeyPair: sshvans
+      pPrivateSubnet1CIDR: 10.240.32.0/20
+      pPrivateSubnet2CIDR: 10.240.48.0/20
+      pPublicSubnet1CIDR: 10.240.0.0/20
+      pPublicSubnet2CIDR: 10.240.16.0/20
+      pVPCCIDR: 10.240.0.0/16
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
+      QSS3KeyPrefix: quickstart-titian-mosaic/
+      pDBPassword: $[taskcat_genpass_8A]
+      pDBTimezone: US/Central
+      pDBAllocatedStorage: 10
+      pDBEngine: oracle-se2
+      # pDBEngineLicenseModel: bring-your-own-license
+      pWebAccessCIDR: 10.240.0.0/16
